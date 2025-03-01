@@ -1,0 +1,64 @@
+<p-message closable size="large" severity="info" icon="pi pi-info-circle">
+  <span class="text-xs">
+    Para enviar mensajes masivos, escribe el mensaje y selecciona un intervalo
+    para que el mensaje se envíe después de un tiempo determinado. 😊📩⌚
+  </span>
+</p-message>
+
+<p-fluid class="mt-2">
+  <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label class="mb-2 block font-bold"> Mensaje </label>
+
+      <p-chip label="Nombres" (click)="insertPlaceholder('@Nombre')"></p-chip>
+      <p-chip
+        label="Apellidos"
+        (click)="insertPlaceholder('@Apellido')"
+      ></p-chip>
+      <!-- <p-editor
+        formControlName="message"
+        [style]="{ height: '96px', width: '100%' }"
+      /> -->
+      <textarea
+        rows="2"
+        cols="30"
+        pTextarea
+        [autoResize]="true"
+        formControlName="message"
+        [style]="{ width: '100%' }"
+      ></textarea>
+    </div>
+
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold"> Intervalo (en segundos) </label>
+      <p-inputnumber
+        inputId="integeronly"
+        formControlName="intervale"
+        [showButtons]="true"
+      />
+    </div>
+
+    <div class="flex mt-6">
+      <div class="flex-1">
+        <p-button
+          label="Cancelar"
+          [rounded]="true"
+          severity="secondary"
+          type="button"
+          (click)="cancel()"
+          [icon]="'pi pi-times'"
+        />
+      </div>
+      <div class="flex-1">
+        <p-button
+          label="Guardar Mensaje"
+          [rounded]="true"
+          severity="success"
+          [disabled]="!messageForm"
+          type="submit"
+          [icon]="'pi pi-save'"
+        />
+      </div>
+    </div>
+  </form>
+</p-fluid>

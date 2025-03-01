@@ -57,3 +57,58 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+# 1. Dashboard / Inicio
+
+**Función:**
+
+- Presenta un resumen general del estado del sistema.
+- Muestra estadísticas clave (número de mensajes enviados, tasa de éxito, errores, etc.).
+- Incluye gráficos, notificaciones recientes y alertas sobre la actividad del sistema.
+
+# 2. Enviar Mensajes
+
+**Función:**
+
+- Es el módulo principal para configurar y programar los envíos masivos.
+- Permite redactar el mensaje (con opciones de edición y, si se desea, un selector de emojis).
+- Ofrece la opción de seleccionar o definir el intervalo de tiempo para el envío automático.
+- Incluye controles para iniciar, pausar o cancelar un envío.
+
+# 3. Contactos / Grupos
+
+**Función:**
+
+- Gestiona la base de datos de destinatarios.
+- Permite importar/exportar contactos (por ejemplo, mediante archivos CSV o Excel).
+- Facilita la creación y gestión de grupos o segmentos de audiencia para envíos específicos.
+
+# 4. Historial / Reportes
+
+**Función:**
+
+- Muestra un registro detallado de los envíos realizados.
+- Proporciona reportes y métricas de rendimiento: cantidad de mensajes entregados, fallidos, abiertos, etc.
+- Permite exportar datos o visualizar gráficos comparativos para análisis.
+
+# 5. Configuración
+
+**Función:**
+
+- Permite ajustar parámetros generales del sistema, como intervalos de envío, plantillas de mensajes o configuración de API.
+- Incluye opciones de integración (por ejemplo, la conexión con la API de WhatsApp).
+- Gestiona aspectos de seguridad, roles de usuario y notificaciones del sistema.
+
+# 6. Soporte / Ayuda
+
+**Función:**
+
+- Brinda acceso a recursos de asistencia, tutoriales, FAQs y documentación.
+- Puede incluir un chat en vivo o enlaces para contactar al equipo de soporte.
+
+# 7. Perfil de Usuario
+
+**Función:**
+
+- Permite al usuario ver y editar su información personal (nombre, foto, correo, etc.).
+- Incluye opciones para cambiar contraseña, configurar notificaciones y ver historial de actividad personal.

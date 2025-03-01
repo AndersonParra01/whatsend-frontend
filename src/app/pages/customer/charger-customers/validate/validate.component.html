@@ -1,0 +1,13 @@
+<div *ngIf="currentStep === 3" class="mb-8">
+  <div *ngIf="validationErrors.length" class="bg-red-50 p-4 rounded-lg mb-4">
+    <h3 class="text-red-800 font-medium mb-2">Validation Errors</h3>
+    <ul class="list-disc pl-5">
+      <li *ngFor="let error of validationErrors" class="text-red-700">
+        {{ error }}
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="!validationErrors.length" class="bg-green-50 p-4 rounded-lg">
+    <p class="text-green-800">All data validated successfully!</p>
+  </div>
+</div>

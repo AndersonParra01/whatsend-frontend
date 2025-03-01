@@ -1,0 +1,52 @@
+<!-- Contenido principal en dos columnas -->
+<div class="flex flex-1">
+  <!-- Columna Izquierda (fondo verde, instrucciones) -->
+  <!-- Se oculta en móviles, aparece en pantallas >= lg -->
+  <div class="hidden lg:flex w-1/2 bg-[#00BFA5] text-white flex-col justify-center items-center p-6">
+    <div class="mb-4">
+      <!-- Ícono de WhatsApp (opcional, usa primeicons) -->
+      <i class="pi pi-whatsapp text-5xl"></i>
+    </div>
+    <h2 class="text-2xl font-bold mb-2">WhatsApp Web</h2>
+    <p class="max-w-md text-center leading-relaxed m-4">
+      Para usar WhatsApp en tu computadora, abre WhatsApp en tu teléfono,
+      toca <strong>Menú</strong> o <strong>Configuración</strong> y selecciona
+      <strong>Dispositivos Vinculados</strong>.
+    </p>
+    <p class="mt-4 max-w-md text-center text-sm opacity-80">
+      Mantén tu teléfono conectado a internet para que la sesión no se cierre.
+    </p>
+  </div>
+
+  <!-- Columna Derecha (QR y mensaje) -->
+  <div class="flex-1 flex flex-col p-4">
+    <!-- Si NO está conectado, muestra QR -->
+    <div *ngIf="!whatsappReady" class="text-center">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">
+        Escanea el código QR con WhatsApp
+      </h2>
+
+      <!-- Si ya tenemos un qrCodeUrl, lo mostramos -->
+      <div *ngIf="qrCodeUrl; else waitingQR"
+            class="border border-gray-300 p-4 rounded-lg shadow-md inline-block">
+        <img [src]="qrCodeUrl" alt="QR Code" class="h-64 w-64 object-contain" />
+      </div>
+
+      <!-- Si NO tenemos qrCodeUrl, mostramos “Esperando QR…” -->
+      <ng-template #waitingQR>
+        <p class="text-gray-500">Esperando QR...</p>
+      </ng-template>
+    </div>
+
+    <!-- Si está conectado, muestra mensaje de éxito -->
+    <div *ngIf="whatsappReady" class="text-center">
+      <h2 class="text-xl font-semibold text-gray-700">
+        ¡WhatsApp está conectado! 🎉
+      </h2>
+      <p class="text-gray-600">
+        Ya puedes cerrar esta ventana.
+      </p>
+    </div>
+
+  </div>
+</div>

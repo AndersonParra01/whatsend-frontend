@@ -1,0 +1,22 @@
+<!--
+  h-screen w-screen: ocupa todo el alto y ancho de la ventana
+  flex: usa flexbox
+  overflow-hidden: evita scroll adicional global
+-->
+<div class="flex h-screen w-screen overflow-x-auto">
+  <!-- Sidebar (fijo) -->
+  <app-sidebar class="w-64"></app-sidebar>
+
+  <!-- Contenedor derecho (topbar + contenido) -->
+  <!-- flex-col: distribuye hijos en columna, flex-1: ocupa el resto de la pantalla -->
+  <div class="flex flex-col flex-1 h-full">
+    <!-- Topbar (barra superior) -->
+    <app-topbar class="h-16"></app-topbar>
+
+    <!-- Contenedor para el contenido principal -->
+    <!-- flex-1: ocupa el resto del espacio vertical, overflow-y-auto: scroll vertical -->
+    <div class="flex-1 overflow-y-auto mt-4">
+      <app-content></app-content>
+    </div>
+  </div>
+</div>

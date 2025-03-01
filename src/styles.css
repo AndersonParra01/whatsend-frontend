@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@use"primeicons/primeicons.css"
+
+.p-chipfy {
+  /* Ejemplo de personalización */
+  background-color: #e0f7fa;
+  border: 1px solid #00acc1;
+  color: #006064;
+}
+.p-chipfy .p-chip-text {
+  background-color: #F97316; /* Verde tipo "Success" */
+  color: #ffffff;           /* Texto en blanco */
+  border: none;            /* Sin borde */
+  padding: 0.1rem;    /* Espaciado interno */
+  border-radius: 4px;      /* Bordes ligeramente redondeados */
+  font-size: 1rem;         /* Tamaño de fuente */
+  cursor: pointer;         /* Cursor de mano al pasar */
+  font-weight: 600;        /* Texto seminegrita */
+  outline: none;
+}

@@ -1,0 +1,27 @@
+<div
+  class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+>
+  <input
+    type="file"
+    #fileInput
+    class="hidden"
+    (change)="onFileSelected($event)"
+    accept=".xlsx,.xls,.csv"
+    multiple="false"
+  />
+  <img
+    src="https://images.unsplash.com/photo-1618477388954-7852f32655ec"
+    alt="upload icon"
+    class="w-16 h-16 mx-auto mb-4"
+  />
+  <p class="text-gray-600 mb-2">Drag and drop your Excel file here</p>
+  <button
+    (click)="fileInput.click()"
+    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+  >
+    Select File
+  </button>
+</div>

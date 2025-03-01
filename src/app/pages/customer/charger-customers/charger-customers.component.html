@@ -1,0 +1,86 @@
+<div class="mx-auto p-1 w-full">
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+      Carga masiva de clientes
+    </h2>
+
+    <!-- Step Progress -->
+    <div class="card">
+      <p-steps [model]="items" [readonly]="false" />
+    </div>
+    <!-- <div class="flex justify-between mb-8">
+      <div *ngFor="let step of steps; let i = index" class="flex items-center">
+        <div
+          [ngClass]="{
+            'bg-blue-500': currentStep > i,
+            'bg-gray-300': currentStep <= i
+          }"
+          class="w-8 h-8 flex items-center justify-center rounded-full text-white font-semibold"
+        >
+          {{ i + 1 }}
+        </div>
+        <div
+          class="ml-2 text-sm font-medium"
+          [class.text-blue-500]="currentStep > i"
+        >
+          {{ step }}
+        </div>
+        <div
+          *ngIf="i < steps.length - 1"
+          class="w-16 h-1 mx-4"
+          [ngClass]="{
+            'bg-blue-500': currentStep > i,
+            'bg-gray-300': currentStep <= i
+          }"
+        ></div>
+      </div>
+    </div> -->
+
+    <!-- File Upload Section -->
+    <div *ngIf="fileUploadComponent" class="m-8">
+      <app-file-upload></app-file-upload>
+    </div>
+
+    <div *ngIf="previewComponent" class="m-8">
+      <app-preview></app-preview>
+    </div>
+
+    <div *ngIf="validateComponent" class="m-8">
+      <app-validate></app-validate>
+    </div>
+
+    <div *ngIf="confirmationComponent" class="m-8">
+      <app-confirmation></app-confirmation>
+    </div>
+
+    <!-- Confirmation Section -->
+    <!-- <div *ngIf="currentStep === 4" class="text-center mb-8">
+      <div class="bg-green-50 p-6 rounded-lg">
+        <i class="fas fa-check-circle text-green-500 text-4xl mb-4"></i>
+        <h3 class="text-xl font-medium text-green-800 mb-2">
+          Upload Successful
+        </h3>
+        <p class="text-green-600">{{ successMessage }}</p>
+      </div>
+    </div> -->
+
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between">
+      <button
+        *ngIf="currentStep > 1"
+        (click)="previousStep()"
+        class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 transition"
+      >
+        Back
+      </button>
+      <!--  <button
+        *ngIf="currentStep < 4"
+        (click)="nextStep()"
+        [disabled]="!canProceed"
+        class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition disabled:opacity-50"
+      >
+        {{ currentStep === 3 ? "Upload" : "Next" }}
+      </button> -->
+    </div>
+  </div>
+</div>

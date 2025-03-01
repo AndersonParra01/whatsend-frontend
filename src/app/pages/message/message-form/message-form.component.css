@@ -1,0 +1,30 @@
+.chip-buttons {
+  margin-bottom: 8px;
+}
+
+.editor {
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 1rem;
+  border-radius: 4px;
+  outline: none;
+}
+
+/* Estilo para el chip insertado */
+.chip {
+  display: inline-block;
+  background-color: #e0e0e0;
+  border-radius: 16px;
+  padding: 2px 8px;
+  margin: 2px;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.chip .remove {
+  margin-left: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
