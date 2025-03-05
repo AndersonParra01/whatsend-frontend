@@ -1,0 +1,23 @@
+<div class="flex flex-row space-x-4">
+  <div class="p-field">
+    <input
+      pInputText
+      type="text"
+      placeholder="Buscar..."
+      [(ngModel)]="search"
+      (input)="filtrarItems()"
+    />
+  </div>
+
+  <div class="flex flex-row space-x-2">
+    <p><strong>Filtrar por Tags:</strong></p>
+
+    <span
+      *ngFor="let tag of availableTags"
+      (click)="toggleTag(tag.name)"
+      [ngClass]="{ selected: selectedTags.includes(tag.name) }"
+    >
+      <p-tag [value]="tag.name"></p-tag>
+    </span>
+  </div>
+</div>

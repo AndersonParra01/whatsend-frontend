@@ -54,8 +54,8 @@
       <td>{{ i + 1 }}</td>
       <td [innerHTML]="message.message | chipify"></td>
       <td>{{ message.intervale }}</td>
-      <td>{{ message.created_at | date }}</td>
-      <td>{{ message.updated_at | date }}</td>
+      <td>{{ message.createdAt | date }}</td>
+      <td>{{ message.updatedAt | date }}</td>
       <td>
         <p-button
           icon="pi pi-pencil"

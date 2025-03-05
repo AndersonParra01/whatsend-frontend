@@ -10,6 +10,12 @@ import { CustomerFormComponent } from '../customer-form/customer-form.component'
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { PaginatorModule } from 'primeng/paginator';
+import { Paginator } from '@app/models/paginator';
+import { InputTextModule } from 'primeng/inputtext';
+import { FormsModule } from '@angular/forms';
+import { SearchComponent } from '../search/search.component';
+import { Tag } from 'primeng/tag';
 
 
 @Component({
@@ -21,17 +27,24 @@ import { ToastModule } from 'primeng/toast';
     CommonModule,
     CustomerFormComponent,
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    PaginatorModule,
+    InputTextModule,
+    FormsModule,
+    SearchComponent,
+    Tag
   ],
   templateUrl: './customer-list.component.html',
   styleUrl: './customer-list.component.css',
-  providers: [ConfirmationService, MessageService]
-
+  providers: [ConfirmationService, MessageService],
 })
 export class CustomerListComponent implements OnInit {
   customer: Customer[] = [];
   openModalCreateAndUpdateCustomer: boolean = false;
   selectedCustomer: Customer | null = null;
+  first: number = 0;
+  rows: number = 10;
+
   constructor(
     private router: Router,
     private customerService: CustomerService,
@@ -94,7 +107,7 @@ export class CustomerListComponent implements OnInit {
             this.messageService.add({
               severity: 'success',
               summary: 'Confirmación exitosa',
-              detail: 'El cliente ha sido eliminado correctamente.'
+              detail: 'El cliente ha sido eliminado correctamente.',
             });
           },
           error: (error) => {
@@ -107,15 +120,20 @@ export class CustomerListComponent implements OnInit {
         this.messageService.add({
           severity: 'info',
           summary: 'Confirmación cancelada',
-          detail: 'La eliminación de este cliente fue cancelada.'
-        })
+          detail: 'La eliminación de este cliente fue cancelada.',
+        });
       },
-    })
+    });
   }
   deleteSelectedProducts() { }
 
   importListCustomers() {
     console.log('importing customers');
     this.router.navigate(['/customers/upload/multiple']);
+  }
+
+  onPageChange(event: Paginator) {
+    this.first = event.first;
+    this.rows = event.rows;
   }
 }

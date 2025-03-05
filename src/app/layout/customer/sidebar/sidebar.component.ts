@@ -21,7 +21,6 @@ export class SidebarComponent {
         separator: true
       },
       {
-        label: 'Envio Masivo',
         items: [
           {
             label: 'Inicio',

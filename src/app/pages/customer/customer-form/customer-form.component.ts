@@ -46,7 +46,7 @@ import { ToastModule } from 'primeng/toast';
     SelectModule,
     ErrorFieldComponent,
     OnlyNumbersDirective,
-    ToastModule
+    ToastModule,
   ],
   templateUrl: './customer-form.component.html',
   styleUrl: './customer-form.component.css',

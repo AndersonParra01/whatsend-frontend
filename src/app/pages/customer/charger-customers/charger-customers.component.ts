@@ -7,6 +7,8 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
 import { PreviewComponent } from './preview/preview.component';
 import { ValidateComponent } from './validate/validate.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { ButtonModule } from 'primeng/button';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-charger-customers',
@@ -16,7 +18,8 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
     FileUploadComponent,
     PreviewComponent,
     ValidateComponent,
-    ConfirmationComponent
+    ConfirmationComponent,
+    ButtonModule
   ],
   templateUrl: './charger-customers.component.html',
   styleUrl: './charger-customers.component.css',
@@ -30,7 +33,7 @@ export class ChargerCustomersComponent implements OnInit {
   validateComponent: boolean = false;
   confirmationComponent: boolean = false;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     this.items = [
@@ -91,5 +94,9 @@ export class ChargerCustomersComponent implements OnInit {
 
   previousStep(): void {
     this.currentStep--;
+  }
+
+  backToListClient() {
+    this.router.navigate(['/customers/list']);
   }
 }

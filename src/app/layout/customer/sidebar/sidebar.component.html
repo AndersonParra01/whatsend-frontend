@@ -1,23 +1,25 @@
 <p-menu [model]="items" class="flex justify-center" styleClass="w-full md:w-60">
   <ng-template #start>
-      <span class="inline-flex items-center gap-1 px-2 py-2">
-          <span class="text-xl font-semibold">
-              PRIME<span class="text-primary">APP</span>
-          </span>
+    <span class="inline-flex items-center gap-1 px-2 py-2">
+      <span class="text-xl font-semibold">
+        Martinizing
+        <!--  <span class="text-3xl">SMS</span> -->
       </span>
+    </span>
   </ng-template>
   <ng-template #submenuheader let-item>
-      <span class="text-primary font-bold">{{ item.label }}</span>
+    <span class="text-primary font-bold">{{ item.label }}</span>
   </ng-template>
   <ng-template #item let-item>
-      <a [routerLink]="item.route" class="flex items-center p-menu-item-link">
-          <span [class]="item.icon"></span>
-          <span class="ml-2">{{ item.label }}</span>
-          <span *ngIf="item.shortcut" class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">
-              {{ item.shortcut }}
-          </span>
-      </a>
+    <a [routerLink]="item.route" class="flex items-center p-menu-item-link">
+      <span [class]="item.icon"></span>
+      <span class="ml-2">{{ item.label }}</span>
+      <span
+        *ngIf="item.shortcut"
+        class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1"
+      >
+        {{ item.shortcut }}
+      </span>
+    </a>
   </ng-template>
-
 </p-menu>
-

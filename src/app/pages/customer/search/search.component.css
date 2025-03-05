@@ -1,0 +1,27 @@
+.p-field {
+  margin-bottom: 1rem;
+}
+.tags-disponibles,
+.tags-seleccionadas {
+  margin-bottom: 1rem;
+}
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.tag-item {
+  cursor: pointer;
+}
+.tag-item.selected p-tag {
+  /* Ejemplo de estilo para tag seleccionado */
+  background-color: #007ad9;
+  color: white;
+}
+
+.item-tags {
+  margin-top: 0.5rem;
+}
+.mr-2 {
+  margin-right: 0.5rem;
+}

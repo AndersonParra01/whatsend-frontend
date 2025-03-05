@@ -1,8 +1,18 @@
 <div class="mx-auto p-1 w-full">
   <div class="bg-white rounded-lg shadow-lg p-6">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">
-      Carga masiva de clientes
-    </h2>
+    <div class="flex justify-between">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">
+        Carga masiva de clientes
+      </h2>
+      <div></div>
+      <p-button
+        icon="pi pi-arrow-circle-left"
+        label="Regresar lista de Clientes"
+        severity="info"
+        variant="outlined"
+        (onClick)="backToListClient()"
+      />
+    </div>
 
     <!-- Step Progress -->
     <div class="card">
