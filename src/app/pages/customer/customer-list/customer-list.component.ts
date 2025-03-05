@@ -77,16 +77,25 @@ export class CustomerListComponent implements OnInit {
       message: '¿Está seguro de eliminar este cliente?',
       header: 'Confirmar eliminación',
       icon: 'pi pi-exclamation-triangle',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Eliminar',
+        severity: 'danger',
+      },
       accept: () => {
         this.customerService.deleteCustomer(customer.id).subscribe({
           next: () => {
             console.log('Customer deleted');
+            this.getCustomerAll();
             this.messageService.add({
               severity: 'success',
               summary: 'Confirmación exitosa',
               detail: 'El cliente ha sido eliminado correctamente.'
             });
-            this.getCustomerAll();
           },
           error: (error) => {
             console.error('Error deleting customer', error);

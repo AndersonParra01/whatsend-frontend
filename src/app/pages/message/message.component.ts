@@ -13,7 +13,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { FileUpload } from 'primeng/fileupload';
 import { SelectModule } from 'primeng/select';
-import { Tag, TagModule } from 'primeng/tag';
+import { TagModule } from 'primeng/tag';
 import { FormsModule } from '@angular/forms';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -38,7 +38,7 @@ import { ChipifyPipe } from '@app/shared/pipes/chip-fy-pipe.pipe';
     CommonModule,
     FileUpload,
     DropdownModule,
-    Tag,
+
     InputTextModule,
     FormsModule,
     IconFieldModule,

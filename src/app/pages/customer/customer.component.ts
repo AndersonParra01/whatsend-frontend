@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
-import { FileUpload } from 'primeng/fileupload';
 import { SplitterModule } from 'primeng/splitter';
-import { ChargerCustomersComponent } from './charger-customers/charger-customers.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -13,9 +11,7 @@ import { Router } from '@angular/router';
   imports: [
     ToolbarModule,
     ButtonModule,
-    FileUpload,
     SplitterModule,
-    ChargerCustomersComponent,
     ReactiveFormsModule,
     CommonModule,
   ],

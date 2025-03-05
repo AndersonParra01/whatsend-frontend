@@ -29,6 +29,8 @@ import { SelectModule } from 'primeng/select';
 import { ErrorFieldComponent } from '@app/shared/components/error-field/error-field.component';
 import { OnlyNumbersDirective } from '@app/shared/directives/only-numbers.directive';
 import { Customer } from '@app/models/customers';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-customer-form',
@@ -44,9 +46,11 @@ import { Customer } from '@app/models/customers';
     SelectModule,
     ErrorFieldComponent,
     OnlyNumbersDirective,
+    ToastModule
   ],
   templateUrl: './customer-form.component.html',
   styleUrl: './customer-form.component.css',
+  providers: [MessageService]
 })
 export class CustomerFormComponent implements OnInit, OnChanges {
   @Input() visible: boolean = false;
@@ -62,13 +66,16 @@ export class CustomerFormComponent implements OnInit, OnChanges {
     { value: 'Activo', label: 'Activo' },
     { value: 'Inactivo', label: 'Inactivo' },
   ];
+  loading: boolean = false;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private customerService: CustomerService,
-    private brancheService: BranchService
+    private brancheService: BranchService,
+    private messageService: MessageService
   ) {
     this.customerForm = this.fb.group({
+      id: [''],
       names: [''],
       phone: ['', [Validators.required, Validators.maxLength(10)]],
       email: ['', [Validators.email]],
@@ -98,25 +105,6 @@ export class CustomerFormComponent implements OnInit, OnChanges {
     }
   }
   ngOnInit(): void {
-    console.log('CustomerFormComponent initialized');
-    /*     this.customerId = +this.route.snapshot.paramMap.get('id')!;
-
-        if (this.customerId) {
-          this.isEdit = true;
-          this.getOneCustomer();
-        } else {
-          this.isEdit = false;
-          this.customerForm.patchValue({
-            names: '',
-            phone: '',
-            email: '',
-            branch: '',
-            status: '',
-            created_at: '',
-            updated_at: '',
-          });
-        } */
-
     this.getAllBranches();
   }
 
@@ -158,13 +146,39 @@ export class CustomerFormComponent implements OnInit, OnChanges {
   }
 
   createAndUpdateCustomer() {
+    this.loading = true;
     if (this.isEdit) {
+
+      const values = this.customerForm.value;
+
       console.log('Update customer');
+      const valuesFinales = {
+        ...values,
+        updatedAt: new Date(),
+      }
+      console.log('FINAL: ', valuesFinales);
+      this.customerService.updateCustomer(valuesFinales).subscribe({
+        next: (customer) => {
+          console.log('Customer updated', customer);
+          this.closeModal();
+          this.loading = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Cliente actualizado correctamente',
+            detail: '',
+          });
+        },
+        error: (error) => {
+          console.error('Error updating customer', error);
+        },
+      });
+
     } else {
       console.log('Create customer');
       const values = this.customerForm.value;
       const newValues = {
         ...values,
+        id: null,
         createdAt: new Date(),
       };
       console.log('FINAL: ', newValues);
@@ -172,6 +186,12 @@ export class CustomerFormComponent implements OnInit, OnChanges {
         next: (customer) => {
           console.log('Customer created', customer);
           this.closeModal();
+          this.loading = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Cliente creado correctamente',
+            detail: '',
+          });
         },
         error: (error) => {
           console.error('Error creating customer', error);
