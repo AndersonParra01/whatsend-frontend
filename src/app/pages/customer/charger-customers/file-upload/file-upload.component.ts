@@ -10,6 +10,7 @@ import * as XLSX from "xlsx";
 export class FileUploadComponent {
   @ViewChild("fileInput") fileInput!: ElementRef;
 
+  selectedFile: File | null = null;
 
   previewData: any[] = [];
   previewHeaders: string[] = [];

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../enviroments/enviroments';
+import { Environment as env } from '../../enviroments/enviroments';
 import { HttpClient } from '@angular/common/http';
 import { Message } from '@app/models/messages';
 import { Observable } from 'rxjs';
@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class MessageService {
-  private apiUrl = `${environment.api}/messages`;
+  private apiUrl = `${env.api}/messages`;
   constructor(private http: HttpClient) { }
 
   getAllMessages(): Observable<Message[]> {

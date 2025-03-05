@@ -1,12 +1,15 @@
+import { Branch_Office } from "./branch_office";
 import { Message } from "./messages";
+import { Status } from "./status";
 
 export interface Customer {
   id: number;
-  name: string;
-  lastName: string;
+  names: string;
   phone: string;
-  email: string;
-  created_at: Date;
-  updated_at: Date;
+  email?: string;
+  branch: Branch_Office
+  status: Status;
+  createdAt: Date;
+  updatedAt: Date;
   messages?: Message[];
 }

@@ -44,14 +44,6 @@ export const routes: Routes = [
         component: CustomerListComponent
       },
       {
-        path: 'customers/create',
-        component: CustomerFormComponent
-      },
-      {
-        path: 'customers/edit/:id',
-        component: CustomerFormComponent
-      },
-      {
         path: 'customers/upload/multiple',
         component: ChargerCustomersComponent
       },

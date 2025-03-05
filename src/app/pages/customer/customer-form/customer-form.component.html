@@ -1,1 +1,109 @@
-<p>customer-form works!</p>
+<p-dialog
+  [header]="titleModal"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem' }"
+  (onHide)="closeModal()"
+  [style]="{ width: '550px', height: '500x' }"
+>
+  <p-fluid>
+    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+      <div class="field">
+        <label
+          appLabel
+          label="Nombre"
+          [valid]="f['names'].valid"
+          [touched]="f['names'].touched"
+          [dirty]="f['names'].dirty"
+        ></label>
+        <input
+          id="names"
+          pInputText
+          formControlName="names"
+          placeholder="Ingrese el nombre"
+        />
+      </div>
+      <div class="field">
+        <label
+          appLabel
+          label="Correo"
+          [valid]="f['email'].valid"
+          [touched]="f['email'].touched"
+          [dirty]="f['email'].dirty"
+        ></label>
+        <input
+          id="email"
+          pInputText
+          formControlName="email"
+          placeholder="Ingrese el correo electrónico"
+        />
+      </div>
+      <div class="field">
+        <label
+          appLabel
+          label="Teléfono"
+          [valid]="f['phone'].valid"
+          [touched]="f['phone'].touched"
+          [dirty]="f['phone'].dirty"
+        ></label>
+        <input
+          id="phone"
+          pInputText
+          formControlName="phone"
+          maxlength="10"
+          placeholder="Ingrese el teléfono"
+          appOnlyNumbers
+        />
+        <error-field [control]="customerForm.get('phone')!"> </error-field>
+      </div>
+      <div class="field">
+        <label
+          appLabel
+          label="Sucursal"
+          [valid]="f['branch'].valid"
+          [touched]="f['branch'].touched"
+          [dirty]="f['branch'].dirty"
+        ></label>
+        <p-select
+          [options]="branches"
+          filter="true"
+          filterBy="name"
+          [placeholder]="'Buscar sucursal'"
+          formControlName="branch"
+          autoHighlight="true"
+          showClear="true"
+          optionValue="id"
+          optionLabel="name"
+        >
+        </p-select>
+        <error-field [control]="customerForm.get('branch')!"> </error-field>
+      </div>
+      <div class="field">
+        <label
+          appLabel
+          label="Estado"
+          [valid]="f['branch'].valid"
+          [touched]="f['branch'].touched"
+          [dirty]="f['branch'].dirty"
+        ></label>
+        <p-select
+          [options]="status"
+          placeholder="Seleccione un estado"
+          formControlName="status"
+          optionValue="label"
+          optionLabel="label"
+        >
+        </p-select>
+        <error-field [control]="customerForm.get('status')!"> </error-field>
+      </div>
+      <div>
+        <button
+          class="mt-8"
+          pButton
+          type="submit"
+          [label]="titleButton"
+        ></button>
+      </div>
+    </form>
+  </p-fluid>
+</p-dialog>

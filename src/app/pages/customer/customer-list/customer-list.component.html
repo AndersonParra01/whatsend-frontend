@@ -1,3 +1,11 @@
+<p-toast />
+<p-confirmdialog />
+<app-customer-form
+  [visible]="openModalCreateAndUpdateCustomer"
+  (close)="closeModal($event)"
+  [customer]="selectedCustomer"
+></app-customer-form>
+<!--   [isUpdate]="true" -->
 <p-toolbar styleClass="w-ll">
   <ng-template #start>
     <p-button
@@ -36,25 +44,30 @@
     />
   </ng-template>
 </p-toolbar>
-
+{{ openModalCreateAndUpdateCustomer }}
 <p-table [value]="customer" [tableStyle]="{ 'min-width': '50rem' }">
   <ng-template #header>
     <tr>
       <th>N°</th>
-      <th>Mensaje</th>
-      <th>Intervalo</th>
+      <th>Nombres</th>
+      <th>Telefono</th>
+      <th>Sucursal</th>
+      <th>Estado</th>
       <th>Fecha Creacion</th>
-      <th>Ultima Actualizacion</th>
       <th>Acciones</th>
     </tr>
   </ng-template>
   <ng-template #body let-customer let-i="rowIndex">
     <tr>
       <td>{{ i + 1 }}</td>
-      <td [innerHTML]="customer.message"></td>
-      <td>{{ customer.intervale }}</td>
-      <td>{{ customer.created_at }}</td>
-      <td>{{ customer.updated_at }}</td>
+      <td>{{ customer.names }}</td>
+      <td>{{ customer.phone }}</td>
+      <td>{{ customer.branch.name }}</td>
+      <td>{{ customer.status }}</td>
+      <td>
+        {{ customer.createdAt | date : "EEEE, d MMMM, y, HH:mm:ss" }}
+      </td>
+
       <td>
         <p-button
           icon="pi pi-pencil"

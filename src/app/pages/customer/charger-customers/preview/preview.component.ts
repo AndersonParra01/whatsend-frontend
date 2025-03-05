@@ -1,8 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-preview',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './preview.component.html',
   styleUrl: './preview.component.css'
 })

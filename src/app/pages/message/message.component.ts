@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ConfirmationService,
   MessageService as MessagePrimeNg,
 } from 'primeng/api';
 import { TableModule } from 'primeng/table';
-import { Dialog } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -20,7 +19,6 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DropdownModule } from 'primeng/dropdown';
 import { Router } from '@angular/router';
-import { Chip } from 'primeng/chip';
 
 import { Message } from '../../models/messages';
 import { Column } from '../../models/column';
@@ -31,7 +29,6 @@ import { ChipifyPipe } from '@app/shared/pipes/chip-fy-pipe.pipe';
   selector: 'app-message',
   imports: [
     TableModule,
-    Dialog,
     SelectModule,
     ToastModule,
     ToolbarModule,
@@ -48,7 +45,6 @@ import { ChipifyPipe } from '@app/shared/pipes/chip-fy-pipe.pipe';
     InputIconModule,
     ButtonModule,
     TagModule,
-    Chip,
     ChipifyPipe
   ],
   templateUrl: './message.component.html',
