@@ -19,6 +19,7 @@ export class CustomerService {
   }
 
   createCustomer(customer: Customer) {
+    console.log('SERVICE CREATE', customer);
     return this.http.post<Customer>(`${this.apiUrl}/create`, customer);
   }
 

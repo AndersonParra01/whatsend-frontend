@@ -176,13 +176,13 @@ export class CustomerFormComponent implements OnInit, OnChanges {
     } else {
       console.log('Create customer');
       const values = this.customerForm.value;
-      const newValues = {
+      const finalData = {
         ...values,
         id: null,
         createdAt: new Date(),
       };
-      console.log('FINAL: ', newValues);
-      this.customerService.createCustomer(this.customerForm.value).subscribe({
+      console.log('FINAL: ', finalData);
+      this.customerService.createCustomer(finalData).subscribe({
         next: (customer) => {
           console.log('Customer created', customer);
           this.closeModal();

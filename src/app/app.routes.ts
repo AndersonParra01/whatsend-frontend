@@ -8,6 +8,7 @@ import { CustomerFormComponent } from './pages/customer/customer-form/customer-f
 import { CustomerListComponent } from './pages/customer/customer-list/customer-list.component';
 import { ChargerCustomersComponent } from './pages/customer/charger-customers/charger-customers.component';
 import { FileUploadComponent } from './pages/customer/charger-customers/file-upload/file-upload.component';
+import { renderModule } from '@angular/platform-server';
 
 export const routes: Routes = [
   {
@@ -33,7 +34,7 @@ export const routes: Routes = [
       },
       {
         path: 'messages/edit/:id',
-        component: MessageFormComponent
+        component: MessageFormComponent,
       },
       {
         path: 'customers',
