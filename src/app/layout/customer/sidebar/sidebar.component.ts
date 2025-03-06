@@ -18,15 +18,36 @@ export class SidebarComponent {
   ngOnInit() {
     this.items = [
       {
+        label: 'Cerrar Sesión',
+        icon: 'pi pi-sign-out',
+        command: () => {
+          // Call logout API
+        }
+      },
+      {
         separator: true
       },
       {
         items: [
           {
+            label: 'Dashboard',
+            icon: 'pi pi-chart-pie',
+            command: () => {
+              this.router.navigate(['/dashboard']);
+            }
+          },
+          {
             label: 'Inicio',
             icon: 'pi pi-home',
             command: () => {
               this.router.navigate(['/home']);
+            }
+          },
+          {
+            label: 'Sucursales',
+            icon: 'pi pi-building',
+            command: () => {
+              this.router.navigate(['/branches']);
             }
           },
           {
@@ -41,6 +62,13 @@ export class SidebarComponent {
             icon: 'pi pi-users',
             command: () => {
               this.router.navigate(['/customers']);
+            }
+          },
+          {
+            label: 'Historial Envios',
+            icon: 'pi pi-history',
+            command: () => {
+              this.router.navigate(['/historical-messages']);
             }
           }
         ]

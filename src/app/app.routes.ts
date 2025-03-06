@@ -9,6 +9,10 @@ import { CustomerListComponent } from './pages/customer/customer-list/customer-l
 import { ChargerCustomersComponent } from './pages/customer/charger-customers/charger-customers.component';
 import { FileUploadComponent } from './pages/customer/charger-customers/file-upload/file-upload.component';
 import { renderModule } from '@angular/platform-server';
+import { SendMessageComponent } from './pages/message/send-message/send-message.component';
+import { BranchesComponent } from './pages/branches/branches.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { HistoricalMessagesComponent } from './pages/historical-messages/historical-messages.component';
 
 export const routes: Routes = [
   {
@@ -19,6 +23,10 @@ export const routes: Routes = [
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
       },
       {
         path: 'home',
@@ -47,6 +55,18 @@ export const routes: Routes = [
       {
         path: 'customers/upload/multiple',
         component: ChargerCustomersComponent
+      },
+      {
+        path: 'messages/send-message/:id',
+        component: SendMessageComponent
+      },
+      {
+        path: 'historical-messages',
+        component: HistoricalMessagesComponent
+      },
+      {
+        path: 'branches',
+        component: BranchesComponent
       },
       {
         path: '**',

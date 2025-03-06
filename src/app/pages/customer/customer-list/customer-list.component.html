@@ -62,17 +62,15 @@
       <td>{{ i + 1 }}</td>
       <td>{{ customer.names }}</td>
       <td>{{ customer.phone }}</td>
-      <td>{{ customer.branch.name }}</td>
+      <td>
+        <p-tag severity="danger" [value]="customer.branch.name"></p-tag>
+      </td>
       <td>
         <p-tag [value]="customer.status"></p-tag>
       </td>
       <td>
         {{ customer.createdAt | date : "EEEE, d MMMM, y, HH:mm:ss" }}
       </td>
-      {{
-        customer.createdAt | date : "EEEE, d MMMM, y, HH:mm:ss"
-      }}
-
       <td>
         <p-button
           icon="pi pi-pencil"

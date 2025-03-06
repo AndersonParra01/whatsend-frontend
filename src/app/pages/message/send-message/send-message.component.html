@@ -1,0 +1,184 @@
+<div class="max-w-full mx-auto space-y-6">
+  <!-- Encabezado Principal -->
+  <div
+    class="bg-card p-4 rounded-lg shadow-sm flex justify-between items-center"
+  >
+    <h1 class="text-2xl font-bold text-foreground dark:text-dark-foreground">
+      Enviar Mensaje
+    </h1>
+    <div>
+      <p-button
+        icon="pi pi-arrow-circle-left"
+        label="Regresar"
+        (click)="backToMessageList()"
+        class="mr-2"
+        severity="info"
+      ></p-button>
+    </div>
+  </div>
+
+  <div
+    class="grid grid-cols-1 md:grid-cols-4 gap-4 justify-center items-center"
+  >
+    <!-- Card 1: Total Contactos -->
+    <div class="bg-amber-200 p-4 rounded-lg flex items-center gap-4">
+      <i class="pi pi-users text-3xl text-primary"></i>
+      <div>
+        <p class="text-sm text-primary">Total Contactos</p>
+        <h3 class="text-2xl font-bold">{{ customers.length }}</h3>
+      </div>
+    </div>
+
+    <!-- Card 2: Tiempo Duracion -->
+    <div class="bg-green-200 p-4 rounded-lg flex items-center gap-4">
+      <i class="pi pi-clock text-3xl text-chart-4"></i>
+      <div>
+        <p class="text-sm text-chart-4">Tiempo Duración</p>
+        <h3 class="text-2xl font-bold">{{ estimatedDuration }} min</h3>
+      </div>
+    </div>
+
+    <!-- Card 3: Total Sucursales -->
+    <div class="bg-blue-200 p-4 rounded-lg flex items-center gap-4">
+      <i class="pi pi-building text-3xl text-primary"></i>
+      <div>
+        <p class="text-sm text-primary">Total Sucursales</p>
+        <h3 class="text-2xl font-bold">{{ branches.length }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selección de Sucursal y Contactos -->
+  <div class="bg-card dark:bg-dark-card p-6 rounded-lg shadow-sm space-y-4">
+    <h2 class="text-xl font-bold">Seleccionar Sucursal y Contactos</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      <!-- Seleccionar Sucursal -->
+      <div>
+        <label class="block text-sm font-medium mb-2">Sucursal</label>
+        <p-select
+          [options]="branches"
+          [(ngModel)]="selectBranch"
+          optionLabel="name"
+          placeholder="Seleccionar Sucursal"
+          class="w-full"
+          showClear="true"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2"
+          >Contactos Disponibles</label
+        >
+        <div class="border rounded-lg p-2 max-h-40 overflow-y-auto">
+          <label
+            *ngFor="let customer of customers"
+            class="flex items-center gap-2"
+          >
+            <span>{{ customer.names }}</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-2"
+            >Velocidad de envío (mensajes/minuto)
+          </label>
+          <div class="flex items-center gap-4">
+            <input
+              type="range"
+              [(ngModel)]="intervaleMessage"
+              min="1"
+              max="60"
+              class="flex-1"
+            />
+            <span class="w-20 text-center font-bold"
+              >{{ intervaleMessage }}/min</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selección del Mensaje -->
+  <div class="grid md:grid-cols-1 gap-6">
+    <div class="bg-card dark:bg-dark-card p-6 rounded-lg shadow-sm">
+      <h2 class="text-xl font-bold mb-4">Vista previa del mensaje</h2>
+      <div class="flex flex-row space-y-2">
+        <div class="flex flex-col">
+          <p class="text-sm text-accent-foreground">
+            Lista seleccionada:
+            <span class="font-bold">{{ selectedList }}</span>
+          </p>
+          <p class="text-sm text-accent-foreground">
+            Destinatarios totales:
+            <span class="font-bold">{{ selectedContacts.length }}</span>
+          </p>
+        </div>
+
+        <button
+          (click)="startSending()"
+          [disabled]="!canSend"
+          class="px-6 py-3 bg-blue-400 text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+        >
+          <i class="fas fa-paper-plane mr-2"></i> Empezar a enviar
+        </button>
+      </div>
+      <div class="mt-4">
+        <p-editor [(ngModel)]="selectedMessage" [style]="{ height: '320px' }" />
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-full mx-auto space-y-6">
+    <!--     <div
+      *ngIf="!isProcessing"
+      class="bg-card dark:bg-dark-card p-6 rounded-lg shadow-sm"
+    >
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold">Enviando Progreso</h2>
+      </div>
+      <div class="mb-6">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-bold"
+            >{{ progress.toFixed(1) }}% completado</span
+          >
+          <p-progressbar [value]="progress.toFixed(1)" />
+
+          <span class="text-sm"
+            >{{ sentCount }}/{{ totalMessages }} messages</span
+          >
+        </div>
+        <div class="h-2 bg-secondary rounded-full overflow-hidden">
+          <div
+            class="h-full bg-primary transition-all duration-500"
+            [style.width.%]="progress"
+          ></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-4 gap-4">
+        <div class="p-3 rounded-lg bg-green-200 text-center">
+          <p class="text-sm text-chart-1">Enviado</p>
+          <h4 class="font-bold">{{ sentCount }}</h4>
+        </div>
+        <div class="p-3 rounded-lg bg-yellow-200 text-center">
+          <p class="text-sm text-chart-2">Entregado</p>
+          <h4 class="font-bold">{{ deliveredCount }}</h4>
+        </div>
+        <div class="p-3 rounded-lg bg-indigo-200 text-center">
+          <p class="text-sm text-chart-3">Pendiente</p>
+          <h4 class="font-bold">{{ pendingCount }}</h4>
+        </div>
+        <div class="p-3 rounded-lg bg-red-200 text-center">
+          <p class="text-sm text-destructive">Fallido</p>
+          <h4 class="font-bold">{{ failedCount }}</h4>
+        </div>
+      </div>
+    </div> -->
+    <div class="flex justify-between items-center">
+      <div class="text-sm text-accent-foreground font-bold">
+        Finalización estimada: {{ getEstimatedCompletion() }}
+      </div>
+    </div>
+  </div>
+</div>

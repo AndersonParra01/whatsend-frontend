@@ -86,16 +86,6 @@ export class MessageComponent {
      */
   }
 
-  /*  getSeverity(status: string) {
-     switch (status) {
-       case 'INSTOCK':
-         return 'success';
-       case 'LOWSTOCK':
-         return 'warning';
-       case 'OUTOFSTOCK':
-         return 'danger';
-     }
-   } */
 
   editMessage(message: Message) {
     console.log(message);
@@ -104,5 +94,10 @@ export class MessageComponent {
 
   deleteMessage(message: Message) {
     console.log(message);
+  }
+
+  messageToSend(message: Message) {
+    console.log('messageToSend');
+    this.router.navigate([`/messages/send-message/${message.id}`])
   }
 }

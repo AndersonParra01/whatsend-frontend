@@ -44,8 +44,7 @@
       <th>N°</th>
       <th>Mensaje</th>
       <th>Intervalo</th>
-      <th>Fecha Creacion</th>
-      <th>Ultima Actualizacion</th>
+      <th>Fecha Creación</th>
       <th>Acciones</th>
     </tr>
   </ng-template>
@@ -55,8 +54,7 @@
       <td [innerHTML]="message.message | chipify"></td>
       <td>{{ message.intervale }}</td>
       <td>{{ message.createdAt | date }}</td>
-      <td>{{ message.updatedAt | date }}</td>
-      <td>
+      <td class="space-x-4 space-y-4">
         <p-button
           icon="pi pi-pencil"
           class="mr-2"
@@ -70,6 +68,13 @@
           [rounded]="true"
           [outlined]="true"
           (click)="deleteMessage(message)"
+        />
+        <p-button
+          icon="pi pi-send"
+          severity="help"
+          [rounded]="true"
+          [outlined]="true"
+          (click)="messageToSend(message)"
         />
       </td>
     </tr>
