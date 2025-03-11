@@ -1,3 +1,4 @@
+import { CustomerService } from './../../services/customer.service';
 import { Component } from '@angular/core';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
@@ -5,6 +6,7 @@ import { SplitterModule } from 'primeng/splitter';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Customer } from '@app/models/customers';
 
 @Component({
   selector: 'app-customer',
@@ -24,13 +26,15 @@ export class CustomerComponent {
   newCustomer() { }
 
   showLoadOptions = false;
-  totalCustomers = 0;
+  customers: Customer[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private customerService: CustomerService
+  ) { }
 
   ngOnInit(): void {
-    // Simulate loading total customers
-    this.totalCustomers = 150;
+    this.getAllCustomers();
   }
 
   navigateToCustomerList(): void {
@@ -41,6 +45,18 @@ export class CustomerComponent {
 
   openLoadOptions(): void {
     this.showLoadOptions = true;
+  }
+
+  getAllCustomers() {
+    this.customerService.getAllCustomers().subscribe({
+      next: (customer) => {
+        console.log('All customers', customer);
+        this.customers = customer;
+      },
+      error: (error) => {
+        console.error('Error getting customers', error);
+      },
+    });
   }
 
   closeLoadOptions(): void {
@@ -59,7 +75,6 @@ export class CustomerComponent {
     // Implement bulk upload logic
     console.log('Uploading bulk data');
   }
-
 
   uploadCustomerMultiple() {
     // Implement multiple customer upload logic

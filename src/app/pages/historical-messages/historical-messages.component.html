@@ -1,1 +1,147 @@
-<p>historical-messages works!</p>
+<div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
+  <!-- Header -->
+  <header
+    class="p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
+  >
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <h1 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          Mensajes Enviados
+        </h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <!-- Botón de filtro de fechas -->
+        <button
+          pButton
+          type="button"
+          icon="pi pi-calendar"
+          class="p-button-text text-gray-900 dark:text-gray-100"
+          (click)="toggleDateFilter()"
+        ></button>
+        <!-- Botón de búsqueda -->
+        <button
+          pButton
+          type="button"
+          icon="pi pi-search"
+          class="p-button-text text-gray-900 dark:text-gray-100"
+          (click)="toggleSearch()"
+        ></button>
+      </div>
+    </div>
+
+    <div *ngIf="showSearch" class="mt-4 w-full">
+      <!-- Contenedor con grid para 2 columnas y 2 filas -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+        <!-- 1a celda: Campo de texto -->
+        <input
+          pInputText
+          type="text"
+          [(ngModel)]="searchText"
+          placeholder="Buscar por nombre o número..."
+          class="w-full"
+        />
+
+        <!-- 2a celda: Selector de tipo de búsqueda -->
+        <p-select
+          [options]="[
+            { label: 'Todos', value: 'all' },
+            { label: 'Nombre', value: 'name' },
+            { label: 'Número', value: 'phone' },
+            { label: 'Contenido', value: 'content' }
+          ]"
+          [(ngModel)]="searchType"
+          placeholder="Filtrar por"
+          class="w-full"
+        ></p-select>
+
+        <!-- 3a celda: Fecha inicial (si showDateFilter es true) -->
+        <p-datepicker
+          *ngIf="showDateFilter"
+          [(ngModel)]="startDate"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+          placeholder="Fecha inicio"
+          [style]="{ width: '100%' }"
+          [showButtonBar]="true"
+        ></p-datepicker>
+
+        <!-- 4a celda: Fecha final (si showDateFilter es true) -->
+        <p-datepicker
+          *ngIf="showDateFilter"
+          [(ngModel)]="endDate"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+          placeholder="Fecha fin"
+          [style]="{ width: '100%' }"
+          [showButtonBar]="true"
+        ></p-datepicker>
+      </div>
+    </div>
+  </header>
+
+  <!-- Lista de mensajes con scroll nativo usando TailwindCSS -->
+  <div class="flex-1 overflow-y-auto">
+    <div
+      *ngFor="let message of filteredMessages"
+      class="p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+      (swipeleft)="onSwipeLeft(message)"
+      (swiperight)="onSwipeRight(message)"
+    >
+      <div class="flex items-start gap-3">
+        <div
+          class="w-12 h-12 rounded-full bg-gray-300 dark:bg-gray-600 overflow-hidden"
+        >
+          <img
+            [src]="message.profilePic"
+            alt="Profile"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex-1">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="font-medium text-gray-900 dark:text-gray-100">
+                {{ message.contactName }}
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                {{ message.phoneNumber }}
+              </p>
+            </div>
+            <div class="text-right">
+              <span class="text-sm text-gray-500 dark:text-gray-400">
+                {{ message.timestamp | date : "short" }}
+              </span>
+              <p
+                *ngIf="message.promotion"
+                class="text-xs text-blue-600 dark:text-blue-400 mt-1"
+              >
+                Promoción
+              </p>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+            {{ message.content }}
+          </p>
+          <div class="flex items-center justify-between mt-2">
+            <div class="flex items-center gap-2">
+              <ng-container [ngSwitch]="message.status">
+                <i *ngSwitchCase="'sent'" class="pi pi-check text-gray-500"></i>
+                <i
+                  *ngSwitchCase="'delivered'"
+                  class="pi pi-check-double text-blue-600"
+                ></i>
+                <i
+                  *ngSwitchCase="'read'"
+                  class="pi pi-check-double text-blue-600"
+                ></i>
+              </ng-container>
+              <span class="text-xs text-gray-500">
+                {{ message.status }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
