@@ -1,6 +1,11 @@
+import { Branch_Office } from "./branch_office";
+import { Status } from "./status";
+
 export interface Message {
   id: number;
   message: string;
+  createdAt: Date;
+  status: string;
   intervale: number;
   contactName: "Jane Smith";
   phoneNumber: "+1987654321";
@@ -10,6 +15,7 @@ export interface Message {
   updated_at: Date;
   content: "¡Aprovecha nuestra promoción especial! 20% de descuento en todos nuestros productos hasta fin de mes.",
   promotion: true;
-  status: "delivered";
+  branch?: Branch_Office;
 }
+
 

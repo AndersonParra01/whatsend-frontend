@@ -14,8 +14,8 @@
 
     <span
       *ngFor="let tag of availableTags"
-      (click)="toggleTag(tag.name)"
-      [ngClass]="{ selected: selectedTags.includes(tag.name) }"
+      (click)="toggleTag(tag.name!)"
+      [ngClass]="{ selected: selectedTags.includes(tag.name!) }"
     >
       <p-tag [value]="tag.name"></p-tag>
     </span>

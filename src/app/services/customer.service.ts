@@ -30,5 +30,9 @@ export class CustomerService {
     return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
 
+  getCustomerByBranch(branchId: number) {
+    return this.http.get<Customer[]>(`${this.apiUrl}/findByBranch/${branchId}`);
+  }
+
 
 }

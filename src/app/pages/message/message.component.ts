@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ConfirmationService,
+  LazyLoadEvent,
   MessageService as MessagePrimeNg,
 } from 'primeng/api';
 import { TableModule } from 'primeng/table';
@@ -23,7 +24,8 @@ import { Router } from '@angular/router';
 import { Message } from '../../models/messages';
 import { Column } from '../../models/column';
 import { MessageService } from '@app/services/message.service';
-import { ChipifyPipe } from '@app/shared/pipes/chip-fy-pipe.pipe';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { InputGroupModule } from 'primeng/inputgroup';
 
 @Component({
   selector: 'app-message',
@@ -38,14 +40,15 @@ import { ChipifyPipe } from '@app/shared/pipes/chip-fy-pipe.pipe';
     CommonModule,
     FileUpload,
     DropdownModule,
-
     InputTextModule,
     FormsModule,
     IconFieldModule,
     InputIconModule,
     ButtonModule,
     TagModule,
-    ChipifyPipe
+    InputTextModule,
+    InputGroupAddonModule,
+    InputGroupModule,
   ],
   templateUrl: './message.component.html',
   styleUrl: './message.component.css',
@@ -59,45 +62,158 @@ export class MessageComponent {
     private messageServiceApi: MessageService
   ) { }
 
-  selectsMessage!: Message[] | null;
+  loading: boolean = false;
+  totalRecords: number = 0;
+  rows: number = 10;
+  first: number = 0;
+  filters: any = {};
+  selectedMessages: Message[] = [];
+  currentPage = 1;
+  totalPages = 1;
+  searchQuery = ''; // Aquí guardas lo que el usuario escriba para filtrar
+
   messages: Message[] = [];
   cols!: Column[];
 
   ngOnInit(): void {
-    this.messageServiceApi.getAllMessages().subscribe({
-      next: (message) => {
-        console.log('All messages', message);
-        this.messages = message;
-      },
-      error: (error) => {
-        console.error('Error getting messages', error);
-      },
-    });
+    this.loadMessages();
+  }
+
+  loadMessages(): void {
+    this.loading = true;
+    this.messageServiceApi
+      .getMessages({
+        page: this.currentPage,
+        rows: this.rows,
+        /* filters: { search: this.searchQuery }, */
+      })
+      .subscribe({
+        next: (response) => {
+          console.log('RESPONSE', response);
+          this.messages = response.data;
+          this.totalRecords = response.total;
+          this.currentPage = response.page;
+          this.totalPages = response.total;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error al cargar mensajes:', err);
+        },
+      });
+  }
+
+  // Métodos para cambiar de página
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadMessages();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadMessages();
+    }
+  }
+
+  // Si quieres filtrar cuando el usuario escribe algo:
+  onSearchChange(): void {
+    // Reiniciar a la primera página
+    this.currentPage = 1;
+    this.loadMessages();
   }
 
   newMessage() {
     this.router.navigate(['/messages/create']);
   }
 
-  deleteSelectedProducts() { }
+  deleteSelectedProducts() {
+    this.confirmationService.confirm({
+      message: '¿Está seguro de eliminar los mensaje seleccionados?',
+      header: 'Confirmar eliminación',
+      icon: 'pi pi-exclamation-triangle',
+      rejectButtonProps: {
+        label: 'Cancelar',
+      },
+      acceptButtonProps: {
+        label: 'Confirmar',
+        icon: 'pi pi-check',
+      },
+      accept: () => {
+        console.log('MEESAGE MASIVO', this.selectedMessages);
 
+        const ids = this.selectedMessages?.map(message => message.id);
+        console.log('IDS', ids);
+        this.messageServiceApi.deleteMessageMany(ids).subscribe({
+          next: () => {
+            console.log('Messages deleted');
+            this.selectedMessages = [];
+            this.currentPage = 1;
+            this.loadMessages();
+          },
+          error: (err) => {
+            console.error('Error al eliminar mensaje:', err);
+          },
+        });
+      },
+    })
+  }
   exportCSV() {
     /*     this.dt.exportCSV();
      */
   }
 
-
   editMessage(message: Message) {
     console.log(message);
-    this.router.navigate([`/messages/edit/${message.id}`,]);
-  }
-
-  deleteMessage(message: Message) {
-    console.log(message);
+    this.router.navigate([`/messages/edit/${message.id}`]);
   }
 
   messageToSend(message: Message) {
     console.log('messageToSend');
-    this.router.navigate([`/messages/send-message/${message.id}`])
+    this.router.navigate([`/messages/send-message/${message.id}`]);
+  }
+
+  onDelete(message: Message) {
+    this.confirmationService.confirm({
+      message: '¿Está seguro de eliminar este mensaje?',
+      header: 'Confirmar eliminación',
+      icon: 'pi pi-exclamation-triangle',
+      rejectButtonProps: {
+        label: 'Cancelar',
+      },
+      acceptButtonProps: {
+        label: 'Confirmar',
+        icon: 'pi pi-check',
+      },
+      accept: () => {
+        this.messageServiceApi.deleteMessage(message.id).subscribe({
+          next: () => {
+            console.log('Message deleted');
+            this.currentPage = 1;
+            this.loadMessages();
+          },
+          error: (err) => {
+            console.error('Error al eliminar mensaje:', err);
+          },
+        });
+      },
+      reject: () => {
+        this.messagePrimeNg.add({
+          severity: 'info',
+          summary: 'Confirmación cancelada',
+          detail: 'La eliminación de este mensaje fue cancelada.',
+        });
+      },
+    });
+  }
+
+  onSearch(event: any) {
+    console.log('EVENT', event);
+    this.filters = {
+      ...this.filters,
+      search: event.target.value,
+    };
+    this.loadMessages();
   }
 }

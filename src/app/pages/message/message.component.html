@@ -6,15 +6,17 @@
       icon="pi pi-plus"
       class="mr-2"
       (onClick)="newMessage()"
+      routerLink="new"
     />
-    <p-button
-      severity="danger"
-      label="Delete"
-      icon="pi pi-trash"
-      outlined
-      (onClick)="deleteSelectedProducts()"
-      [disabled]="!selectsMessage || !selectsMessage.length"
-    />
+    <div *ngIf="selectedMessages.length > 0">
+      <p-button
+        severity="danger"
+        label="Eliminar Mensajes"
+        icon="pi pi-trash"
+        outlined
+        (onClick)="deleteSelectedProducts()"
+      />
+    </div>
   </ng-template>
 
   <ng-template #end>
@@ -38,183 +40,123 @@
   </ng-template>
 </p-toolbar>
 
-<p-table [value]="messages" [tableStyle]="{ 'min-width': '50rem' }">
-  <ng-template #header>
-    <tr>
-      <th>N°</th>
-      <th>Mensaje</th>
-      <th>Intervalo</th>
-      <th>Fecha Creación</th>
-      <th>Acciones</th>
-    </tr>
-  </ng-template>
-  <ng-template #body let-message let-i="rowIndex">
-    <tr>
-      <td>{{ i + 1 }}</td>
-      <td [innerHTML]="message.message | chipify"></td>
-      <td>{{ message.intervale }}</td>
-      <td>{{ message.createdAt | date }}</td>
-      <td class="space-x-4 space-y-4">
-        <p-button
-          icon="pi pi-pencil"
-          class="mr-2"
-          [rounded]="true"
-          [outlined]="true"
-          (click)="editMessage(message)"
-        />
-        <p-button
-          icon="pi pi-trash"
-          severity="danger"
-          [rounded]="true"
-          [outlined]="true"
-          (click)="deleteMessage(message)"
-        />
-        <p-button
-          icon="pi pi-send"
-          severity="help"
-          [rounded]="true"
-          [outlined]="true"
-          (click)="messageToSend(message)"
-        />
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
-
-<!-- <p-table
-  [value]="messages"
-  [rows]="10"
-  [columns]="cols"
-  [paginator]="true"
-  [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-  [tableStyle]="{ 'min-width': '75rem' }"
-  [(selection)]="selectsMessage"
-  [rowHover]="true"
-  dataKey="id"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-  [showCurrentPageReport]="true"
->
-  <ng-template #caption>
-      <div class="flex items-center justify-between">
-          <h5 class="m-0">Manage Products</h5>
-          <p-iconfield>
-              <p-inputicon styleClass="pi pi-search" />
-              <input pInputText type="text"  placeholder="Search..." />
-          </p-iconfield>
+<div class="card">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="m-0">Mensajes</h1>
+    <div class="flex gap-2">
+      <div class="relative">
+        <p-inputGroup>
+          <p-inputgroup-addon>
+            <i class="pi pi-search"></i>
+          </p-inputgroup-addon>
+          <input
+            pInputText
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="onSearchChange()"
+            placeholder="Buscar sucursales..."
+          />
+        </p-inputGroup>
       </div>
-  </ng-template>
-  <ng-template #header>
+    </div>
+  </div>
+  <p-table
+    #dt
+    [value]="messages"
+    [rows]="rows"
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    [paginator]="true"
+    [lazy]="true"
+    [rowHover]="true"
+    [(selection)]="selectedMessages"
+    dataKey="id"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} mensajes"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    styleClass="p-datatable-sm"
+    [scrollable]="true"
+    [loading]="loading"
+    [(selection)]="selectedMessages"
+  >
+    <ng-template pTemplate="header">
       <tr>
-          <th style="width: 3rem">
-              <p-tableHeaderCheckbox />
-          </th>
-          <th style="min-width: 16rem">Code</th>
-          <th pSortableColumn="name" style="min-width:16rem">
-              Name
-              <p-sortIcon field="name" />
-          </th>
-          <th>Image</th>
-          <th pSortableColumn="price" style="min-width: 8rem">
-              Price
-              <p-sortIcon field="price" />
-          </th>
-          <th pSortableColumn="category" style="min-width:10rem">
-              Category
-              <p-sortIcon field="category" />
-          </th>
-          <th pSortableColumn="rating" style="min-width: 12rem">
-              Reviews
-              <p-sortIcon field="rating" />
-          </th>
-          <th pSortableColumn="inventoryStatus" style="min-width: 12rem">
-              Status
-              <p-sortIcon field="inventoryStatus" />
-          </th>
-          <th style="min-width: 12rem"></th>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+        <th pSortableColumn="message">
+          Mensaje <p-sortIcon field="message"></p-sortIcon>
+        </th>
+        <th pSortableColumn="createdAt">
+          Fecha Creación <p-sortIcon field="createdAt"></p-sortIcon>
+        </th>
+        <th pSortableColumn="status">
+          Estado <p-sortIcon field="status"></p-sortIcon>
+        </th>
+        <th style="width: 8rem">Acciones</th>
       </tr>
-  </ng-template>
-  <ng-template #body let-product>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-message>
       <tr>
-          <td style="width: 3rem">
-              <p-tableCheckbox [value]="product" />
-          </td>
-          <td style="min-width: 12rem">{{ product.code }}</td>
-          <td style="min-width: 16rem">{{ product.name }}</td>
-          <td>
-              <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" style="width: 64px" class="rounded" />
-          </td>
-          <td>{{ product.price | currency: 'USD' }}</td>
-          <td>{{ product.category }}</td>
-
-          <td>
-              <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editMessage(product)" />
-              <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteMessage(product)" />
-          </td>
+        <td>
+          <p-tableCheckbox [value]="message"></p-tableCheckbox>
+        </td>
+        <td>{{ message.id }}</td>
+        <td>{{ message.message }}</td>
+        <td>{{ message.createdAt | date : "dd/MM/yyyy HH:mm" }}</td>
+        <td>
+          <p-tag
+            [severity]="message.status === 'Activo' ? 'success' : 'warn'"
+            [value]="message.status"
+          >
+          </p-tag>
+        </td>
+        <td>
+          <div class="flex gap-2 justify-content-center">
+            <button
+              pButton
+              icon="pi pi-pencil"
+              [rounded]="true"
+              [outlined]="true"
+              class="p-button-rounded p-button-warning p-button-sm"
+              (click)="editMessage(message)"
+            ></button>
+            <button
+              pButton
+              icon="pi pi-trash"
+              severity="danger"
+              [rounded]="true"
+              [outlined]="true"
+              class="p-button-rounded p-button-danger p-button-sm"
+              (click)="onDelete(message)"
+            ></button>
+            <button
+              pButton
+              icon="pi pi-send"
+              severity="help"
+              [rounded]="true"
+              [outlined]="true"
+              (click)="messageToSend(message)"
+            ></button>
+          </div>
+        </td>
       </tr>
-  </ng-template>
-  <ng-template #summary>
-      <div class="flex items-center justify-between">In total there are {{ messages ? messages.length : 0 }} products.</div>
-  </ng-template>
-</p-table> -->
+    </ng-template>
 
-<!-- <p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Product Details" [modal]="true">
-  <ng-template #content>
-      <div class="flex flex-col gap-6">
-          <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="product.image" />
-          <div>
-              <label for="name" class="block font-bold mb-3">Name</label>
-              <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus fluid />
-              <small class="text-red-500" *ngIf="submitted && !product.name">Name is required.</small>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center p-4">
+          <div class="flex flex-col items-center justify-center">
+            <i
+              class="pi pi-inbox mb-3 justify-center items-center"
+              style="font-size: 2rem"
+            ></i>
+            <span>No se encontraron mensajes</span>
           </div>
-          <div>
-              <label for="description" class="block font-bold mb-3">Description</label>
-              <textarea id="description" pTextarea [(ngModel)]="product.description" required rows="3" cols="20" fluid></textarea>
-          </div>
-
-          <div>
-              <label for="inventoryStatus" class="block font-bold mb-3">Inventory Status</label>
-              <p-select [(ngModel)]="product.inventoryStatus" inputId="inventoryStatus" [options]="statuses" optionLabel="label" placeholder="Select a Status" fluid />
-          </div>
-
-          <div>
-              <span class="block font-bold mb-4">Category</span>
-              <div class="grid grid-cols-12 gap-4">
-                  <div class="flex items-center gap-2 col-span-6">
-                      <p-radiobutton id="category1" name="category" value="Accessories" [(ngModel)]="product.category" />
-                      <label for="category1">Accessories</label>
-                  </div>
-                  <div class="flex items-center gap-2 col-span-6">
-                      <p-radiobutton id="category2" name="category" value="Clothing" [(ngModel)]="product.category" />
-                      <label for="category2">Clothing</label>
-                  </div>
-                  <div class="flex items-center gap-2 col-span-6">
-                      <p-radiobutton id="category3" name="category" value="Electronics" [(ngModel)]="product.category" />
-                      <label for="category3">Electronics</label>
-                  </div>
-                  <div class="flex items-center gap-2 col-span-6">
-                      <p-radiobutton id="category4" name="category" value="Fitness" [(ngModel)]="product.category" />
-                      <label for="category4">Fitness</label>
-                  </div>
-              </div>
-          </div>
-
-          <div class="grid grid-cols-12 gap-4">
-              <div class="col-span-6">
-                  <label for="price" class="block font-bold mb-3">Price</label>
-                  <p-inputnumber id="price" [(ngModel)]="product.price" mode="currency" currency="USD" locale="en-US" fluid />
-              </div>
-              <div class="col-span-6">
-                  <label for="quantity" class="block font-bold mb-3">Quantity</label>
-                  <p-inputnumber id="quantity" [(ngModel)]="product.quantity" fluid />
-              </div>
-          </div>
-      </div>
-  </ng-template>
-
-  <ng-template #footer>
-      <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
-      <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
-  </ng-template>
-</p-dialog>
- -->
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
 <p-confirmDialog [style]="{ width: '450px' }" />

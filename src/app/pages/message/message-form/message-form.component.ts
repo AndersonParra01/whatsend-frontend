@@ -50,6 +50,7 @@ export class MessageFormComponent implements OnInit {
     this.messageForm = this.fb.group({
       message: ['', Validators.required],
       intervale: [0, [Validators.required, Validators.min(1)]],
+      status: ['Activo']
     });
   }
 

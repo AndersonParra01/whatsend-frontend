@@ -17,12 +17,12 @@ export class BranchService {
     return this.http.get<Branch_Office>(`${this.apiUrl}/findBy/${id}`);
   }
 
-  createBranch(branchOffice: Branch_Office) {
+  createBranch(branchOffice: Branch_Office | null) {
     return this.http.post<Branch_Office>(`${this.apiUrl}/create`, branchOffice);
   }
 
-  updateBranch(branchOffice: Branch_Office) {
-    return this.http.put<Branch_Office>(`${this.apiUrl}/update/${branchOffice.id}`, branchOffice);
+  updateBranch(branchOffice: Branch_Office | null) {
+    return this.http.put<Branch_Office>(`${this.apiUrl}/update/${branchOffice?.id}`, branchOffice);
   }
 
   deleteBranch(id: number) {
