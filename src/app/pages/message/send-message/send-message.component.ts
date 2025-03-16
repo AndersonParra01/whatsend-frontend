@@ -12,7 +12,10 @@ import { EditorModule } from 'primeng/editor';
 import { SelectModule } from 'primeng/select';
 import { CardModule } from 'primeng/card';
 import { ProgressBarModule } from 'primeng/progressbar';
-
+import { CheckboxModule } from 'primeng/checkbox';
+import { LocalstorageService } from '@app/services/core/localstorage.service';
+import { SendingModalComponent } from '../sending-modal/sending-modal.component';
+import { DataSend } from '@app/models/dataSend';
 
 @Component({
   selector: 'app-send-message',
@@ -23,15 +26,15 @@ import { ProgressBarModule } from 'primeng/progressbar';
     ButtonModule,
     SelectModule,
     CardModule,
-    ProgressBarModule
-
+    ProgressBarModule,
+    CheckboxModule,
+    SendingModalComponent
   ],
   templateUrl: './send-message.component.html',
   styleUrl: './send-message.component.css',
 })
 export class SendMessageComponent implements OnInit {
   messageId!: number;
-  selectedContacts: string[] = [];
   selectedMessage: string = '';
   selectedList = 'Marketing List #1';
   messageLength = 0;
@@ -39,112 +42,100 @@ export class SendMessageComponent implements OnInit {
   isScheduled = false;
   scheduledTime = '';
   estimatedDuration = 0;
-  isProcessing = false;
-  isPaused = false;
-  progress = 0;
-  sentCount = 0;
-  deliveredCount = 0;
-  pendingCount = 0;
-  failedCount = 0;
-  totalMessages = 0;
   branches: Branch_Office[] = [];
-  selectBranch: string = '';
-
-  contactosDisponibles = [
-    { nombre: 'Juan Pérez', seleccionado: false },
-    { nombre: 'María Gómez', seleccionado: false },
-    {
-      nombre: 'Carlos Ruiz',
-      seleccionado: false,
-    },
-  ];
+  selectedBranch: Branch_Office | null = null;
+  idBranchSelected: number | null = null;
   customers: Customer[] = [];
-  sucursalSeleccionada = null;
-
   mensajeSeleccionado: number = 0;
-
-  fechaProgramada = null;
   intervaleMessage: number = 0;
-
+  selectedContacts: Customer[] = [];
+  selectAll: boolean = false;
+  data: DataSend | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,
     private branchService: BranchService,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private localStorage: LocalstorageService
   ) { }
   ngOnInit() {
     this.messageId = parseInt(this.route.snapshot.paramMap.get('id')!);
-    this.loadInitialData();
+    this.idBranchSelected = this.localStorage.getItem('branchId');
+    if (this.idBranchSelected) {
+      /*   this.loadBranchesById(this.idBranchSelected!);
+        this.getContactsByBranch(this.idBranchSelected!); */
+    }
+    console.log('idBranch', this.idBranchSelected);
     this.getMessageById();
-    this.loadCustomersAll();
     this.loadBranchesAll();
   }
-
-  loadInitialData() {
-    this.selectedContacts = Array(100)
-      .fill(0)
-      .map((_, i) => `+1555000${i.toString().padStart(4, '0')}`);
-    this.messageLength = this.selectedMessage.length;
-  }
-
-
 
   get canSend(): boolean {
     return (
       this.selectedContacts.length > 0 &&
-      this.selectedMessage.trim().length > 0 &&
-      !this.isProcessing
+      this.selectedMessage.trim().length > 0
     );
   }
 
   getEstimatedCompletion(): string {
-    if (this.isScheduled && this.scheduledTime) {
-      return `Scheduled for ${new Date(this.scheduledTime).toLocaleString()}`;
+    // 1) Validaciones básicas
+    if (!this.selectedContacts || this.selectedContacts.length === 0) {
+      return 'No hay contactos seleccionados';
     }
-    return `${this.estimatedDuration} minutes`;
+
+    if (!this.intervaleMessage) {
+      return 'No se ha definido el intervalo de envío';
+    }
+
+    // 2) Convertir a número y verificar que sea válido (positivo)
+    const intervalInSeconds = parseFloat(this.intervaleMessage.toString());
+    if (isNaN(intervalInSeconds) || intervalInSeconds <= 0) {
+      return 'Intervalo de envío inválido';
+    }
+
+    // 3) Calcular el total de segundos = (# contactos) x (segundos por mensaje)
+    const totalContacts = this.selectedContacts.length;
+    const totalSeconds = totalContacts * intervalInSeconds;
+
+    // 4) Formatear el tiempo total a h/min/seg
+    const tiempoFormateado = this.formatTime(totalSeconds);
+
+    // 5) Retornar un texto más directo
+    return `Se tardará aproximadamente ${tiempoFormateado} en enviar ${totalContacts} mensaje(s).`;
+  }
+
+
+  private formatTime(seconds: number): string {
+    // Redondeamos a entero por si se reciben decimales
+    let resto = Math.floor(seconds);
+
+    const horas = Math.floor(resto / 3600);
+    resto = resto % 3600;
+
+    const minutos = Math.floor(resto / 60);
+    const segs = resto % 60;
+
+    // Construimos un string dependiendo de cuáles sean mayores a 0
+    // Ej: "2 h 5 min 10 s", "45 s", "10 min 5 s", etc.
+    let resultado = '';
+    if (horas > 0) {
+      resultado += `${horas} h `;
+    }
+    if (minutos > 0) {
+      resultado += `${minutos} min `;
+    }
+    if (segs > 0 || (horas === 0 && minutos === 0)) {
+      // Si no hay horas ni minutos, mostramos los segundos
+      resultado += `${segs} s`;
+    }
+
+    return resultado.trim();
   }
 
   validateSettings(): void {
     console.log('Validating settings...');
-  }
-
-  startSending(): void {
-    this.isProcessing = true;
-    this.totalMessages = this.selectedContacts.length;
-    this.progress = 0;
-    this.sentCount = 0;
-    this.deliveredCount = 0;
-    this.failedCount = 0;
-    this.pendingCount = this.totalMessages;
-
-    const sendInterval = setInterval(() => {
-      if (this.isPaused) return;
-
-      this.sentCount++;
-      this.pendingCount--;
-      this.progress = (this.sentCount / this.totalMessages) * 100;
-
-      if (Math.random() > 0.1) {
-        this.deliveredCount++;
-      } else {
-        this.failedCount++;
-      }
-
-      if (this.sentCount >= this.totalMessages) {
-        clearInterval(sendInterval);
-        this.isProcessing = false;
-      }
-    }, (60 / this.intervaleMessage) * 1000);
-  }
-
-  pauseSending(): void {
-    this.isPaused = !this.isPaused;
-  }
-
-  stopSending(): void {
-    this.isProcessing = false;
   }
 
   getMessageById() {
@@ -156,22 +147,6 @@ export class SendMessageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error retrieving message', error);
-      },
-    });
-  }
-
-  loadCustomersAll() {
-    this.customerService.getAllCustomers().subscribe({
-      next: (customers) => {
-        console.log('All customers', customers);
-        this.customers = customers;
-        /* this.branches = customers.map((c) => ({
-          id: c.id,
-          name: c.names,
-        })); */
-      },
-      error: (error) => {
-        console.error('Error getting customers', error);
       },
     });
   }
@@ -188,22 +163,69 @@ export class SendMessageComponent implements OnInit {
     });
   }
 
-  puedeEnviar(): boolean | null {
-    return (
-      this.sucursalSeleccionada &&
-      this.mensajeSeleccionado &&
-      this.contactosDisponibles.some((c) => c.seleccionado)
-    );
+  loadBranchesById(idBranch: number) {
+    this.branchService.getBranchById(idBranch).subscribe({
+      next: (branches) => {
+        console.log('Branche By Id: ', branches);
+        this.selectedBranch = branches;
+      },
+      error: (error) => {
+        console.error('Error getting branches', error);
+      },
+    });
   }
 
-  enviarMensaje(): void {
-    const contactosSeleccionados = this.contactosDisponibles.filter(
-      (c) => c.seleccionado
-    );
-    alert(`Mensaje enviado a ${contactosSeleccionados.length} contactos.`);
-  }
+  enviarMensaje(): void { }
 
   backToMessageList() {
     this.router.navigate(['/messages']);
+  }
+
+  getBranch(event: any) {
+    if (event.value) {
+      console.log('CHANGE', event);
+      console.log('CHANGE', event.value.id);
+      this.localStorage.setItem('branchId', (event.value.id));
+      this.getContactsByBranch(event.value.id);
+    } else {
+      console.log('No hay sucursal seleccionada');
+      this.localStorage.removeItem('branchId');
+      // O cualquier lógica que requieras cuando el usuario limpia la selección
+    }
+  }
+
+  getContactsByBranch(branchId: number) {
+    this.customerService.getCustomerByBranch(branchId).subscribe({
+      next: (customers) => {
+        console.log('Customers by branch', customers);
+        this.customers = customers;
+      },
+      error: (error) => {
+        console.error('Error getting customers by branch', error);
+      },
+    })
+  }
+
+  onSelectAllChange(event: any) {
+    if (event.checked) {
+      // Marcar todos los contactos
+      this.selectedContacts = [...this.customers];
+      console.log('Todos los contactos seleccionados', this.selectedContacts);
+    } else {
+      // Deseleccionar todos los contactos
+      this.selectedContacts = [];
+    }
+  }
+
+  startSending() {
+    console.log('Iniciando envío...');
+
+    this.isScheduled = true;
+    this.data = {
+      message: this.selectedMessage,
+      intervale: this.intervaleMessage,
+      branch: this.selectedBranch!,
+      contacts: this.selectedContacts,
+    }
   }
 }

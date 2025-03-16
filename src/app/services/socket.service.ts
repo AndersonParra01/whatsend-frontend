@@ -36,11 +36,75 @@ export class SocketService {
     });
   }
 
-  sendMessage(message: string): void {
-    this.socket.emit('send-message', message);
-  }
 
   connected(): boolean {
     return this.socket.connected;
+  }
+
+  /**
+  * Escucha un evento específico del servidor y retorna un Observable con sus datos.
+  * @param eventName Nombre del evento a escuchar
+  */
+  listen<T>(eventName: string): Observable<T> {
+    return new Observable((subscriber) => {
+      this.socket.on(eventName, (data: T) => {
+        console.log('DATA RECEIVED BACKEND', data);
+        subscriber.next(data);
+      });
+    });
+  }
+
+  /**
+   * Envía un evento al servidor
+   * @param eventName Nombre del evento
+   * @param data Datos a enviar (opcional)
+   */
+  emit(eventName: string, data?: any) {
+    this.socket.emit(eventName, data);
+  }
+
+  /**
+   * Envía mensaje de WhatsApp a un número dado
+   * @param number Número de WhatsApp (puede ser local, el back lo formateará)
+   * @param message Texto del mensaje
+   */
+  sendMessage(number: string, message: string) {
+    this.socket.emit('send-message', { number, message });
+  }
+
+  sendBulkMessages(numbers: string[], message: string, delaySeconds: number) {
+    this.socket.emit('bulk-send-message', { numbers, message, delaySeconds });
+  }
+
+  // Escuchar resultado del envío masivo desde servidor
+  onBulkSendResult(): Observable<any[]> {
+    return new Observable(observer => {
+      this.socket.on('bulk-send-result', (data) => {
+        observer.next(data);
+      });
+
+      // Manejar error si es necesario
+      this.socket.on('error', (error) => {
+        observer.error(error);
+      });
+    });
+  }
+
+  /**
+   * Cierra la conexión manualmente (opcional)
+   */
+  disconnect() {
+    if (this.socket) {
+      this.socket.disconnect();
+    }
+  }
+
+  /**
+   * Vuelve a conectar manualmente (opcional)
+   */
+  connect() {
+    if (this.socket && !this.socket.connected) {
+      this.socket.connect();
+    }
   }
 }

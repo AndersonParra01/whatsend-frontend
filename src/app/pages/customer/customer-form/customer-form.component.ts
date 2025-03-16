@@ -31,7 +31,8 @@ import { OnlyNumbersDirective } from '@app/shared/directives/only-numbers.direct
 import { Customer } from '@app/models/customers';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 @Component({
   selector: 'app-customer-form',
   imports: [
@@ -47,6 +48,7 @@ import { ToastModule } from 'primeng/toast';
     ErrorFieldComponent,
     OnlyNumbersDirective,
     ToastModule,
+    IconFieldModule, InputIconModule
   ],
   templateUrl: './customer-form.component.html',
   styleUrl: './customer-form.component.css',
@@ -77,10 +79,10 @@ export class CustomerFormComponent implements OnInit, OnChanges {
     this.customerForm = this.fb.group({
       id: [''],
       names: [''],
-      phone: ['', [Validators.required, Validators.maxLength(10)]],
+      phone: ['', [Validators.required, Validators.maxLength(10), Validators.pattern(/^0\d{9}$/)]],
       email: ['', [Validators.email]],
       branch: ['', Validators.required],
-      status: ['', Validators.required],
+      status: ['Activo', Validators.required],
       createdAt: [''],
       updatedAt: [''],
     });
@@ -107,6 +109,17 @@ export class CustomerFormComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.getAllBranches();
   }
+
+  validatePhoneInput() {
+    const phoneControl = this.customerForm.get('phone');
+    if (phoneControl) {
+      const phoneValue = phoneControl.value?.replace(/\D/g, '') || '';
+      if (phoneValue.length > 10) {
+        phoneControl.setValue(phoneValue.substring(0, 10));
+      }
+    }
+  }
+
 
   closeModal() {
     console.log('closeModal', this.close.emit(false));
@@ -147,16 +160,31 @@ export class CustomerFormComponent implements OnInit, OnChanges {
 
   createAndUpdateCustomer() {
     this.loading = true;
+
+    // Obtienes los valores actuales del formulario
+    const values = this.customerForm.value;
+
+    // Limpias y formateas el teléfono antes de guardar/actualizar
+    let phone: string = values.phone || '';
+    phone = phone.replace(/\D/g, '');
+
+    if (phone.startsWith('0')) {
+      phone = '593' + phone.substring(1);
+    } else if (!phone.startsWith('593')) {
+      phone = '593' + phone;
+    }
+
     if (this.isEdit) {
-
-      const values = this.customerForm.value;
-
       console.log('Update customer');
+
       const valuesFinales = {
         ...values,
+        phone, // teléfono formateado correctamente
         updatedAt: new Date(),
-      }
+      };
+
       console.log('FINAL: ', valuesFinales);
+
       this.customerService.updateCustomer(valuesFinales).subscribe({
         next: (customer) => {
           console.log('Customer updated', customer);
@@ -170,18 +198,22 @@ export class CustomerFormComponent implements OnInit, OnChanges {
         },
         error: (error) => {
           console.error('Error updating customer', error);
+          this.loading = false;
         },
       });
 
     } else {
       console.log('Create customer');
-      const values = this.customerForm.value;
+
       const finalData = {
         ...values,
         id: null,
+        phone, // teléfono formateado correctamente
         createdAt: new Date(),
       };
+
       console.log('FINAL: ', finalData);
+
       this.customerService.createCustomer(finalData).subscribe({
         next: (customer) => {
           console.log('Customer created', customer);
@@ -195,10 +227,12 @@ export class CustomerFormComponent implements OnInit, OnChanges {
         },
         error: (error) => {
           console.error('Error creating customer', error);
+          this.loading = false;
         },
       });
     }
   }
+
 
   get f() {
     return this.customerForm.controls;

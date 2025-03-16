@@ -47,14 +47,18 @@
           [touched]="f['phone'].touched"
           [dirty]="f['phone'].dirty"
         ></label>
-        <input
-          id="phone"
-          pInputText
-          formControlName="phone"
-          maxlength="10"
-          placeholder="Ingrese el teléfono"
-          appOnlyNumbers
-        />
+        <p-iconfield>
+          <p-inputicon styleClass="pi pi-whatsapp" />
+          <input
+            id="phone"
+            pInputText
+            formControlName="phone"
+            maxlength="10"
+            placeholder="Ejemplo: 0991234567"
+            appOnlyNumbers
+            (input)="validatePhoneInput()"
+          />
+        </p-iconfield>
         <error-field [control]="customerForm.get('phone')!"> </error-field>
       </div>
       <div class="field">

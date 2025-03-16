@@ -18,6 +18,7 @@ export class QrScannerComponent implements OnInit {
 
   qrCodeUrl: string | null = null;
   whatsappReady: boolean = false;
+  whatsappConnected: boolean = false;
   ngOnInit(): void {
     this.socketService.onQrCode().subscribe((qrUrl) => {
       console.log('listening on qr-code from FrontEnd', qrUrl);
@@ -27,12 +28,12 @@ export class QrScannerComponent implements OnInit {
     this.socketService.onWhatsAppReady().subscribe(() => {
       console.log('WhatsApp ready');
       this.whatsappReady = true;
+      this.whatsappConnected = true;
       this.cd.detectChanges();
     });
   }
 
   sentToMessage(message: string) {
     console.log('Mensaje', message);
-    this.socketService.sendMessage(message);
   }
 }
