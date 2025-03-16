@@ -1,6 +1,6 @@
 export interface TotalContactsSend {
   names: string;
-  phone: string;
   branch: string;
+  phone: string;
   status: string;
 }

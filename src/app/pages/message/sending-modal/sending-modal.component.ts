@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  EventEmitter,
   Input,
   NgZone,
   OnChanges,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import { Customer } from '@app/models/customers';
@@ -17,6 +19,7 @@ import { MessageService } from 'primeng/api';
 import { SocketService } from '@app/services/socket.service';
 import { TotalContactsSend } from '@app/models/totalContactsSend';
 import { Tag } from 'primeng/tag';
+import { ExportFilesService } from '@app/services/export-files.service';
 
 @Component({
   selector: 'app-sending-modal',
@@ -36,6 +39,7 @@ import { Tag } from 'primeng/tag';
 export class SendingModalComponent implements OnChanges {
   @Input() visible: boolean = false;
   @Input() data: DataSend | null = null;
+  @Output() close: EventEmitter<boolean> = new EventEmitter();
   progress = 0;
   totalMessages = 0;
   deliveredCount = 0;
@@ -52,14 +56,19 @@ export class SendingModalComponent implements OnChanges {
   estimatedTotalTimeMs = 0;
   progressInterval: any;
   totalContactsSend: TotalContactsSend[] = [];
+
   constructor(
     private ngZone: NgZone,
     private messagePrimeNg: MessageService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private reportService: ExportFilesService
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('changes: ', changes);
     if (changes['data'] && this.data?.contacts) {
       this.totalMessages = this.data?.contacts?.length;
+      this.totalContactsSend
+      this.value
     }
   }
 
@@ -128,7 +137,9 @@ export class SendingModalComponent implements OnChanges {
     this.isPaused = !this.isPaused;
   }
 
-  closeModal() { }
+  closeModal() {
+    this.close.emit(false);
+  }
 
   getSeverityByStatus(status: string): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | undefined {
     switch (status) {
@@ -143,4 +154,33 @@ export class SendingModalComponent implements OnChanges {
     }
   }
 
+  exporTotPdfContactsSend() {
+    console.log('export pdf');
+    const data = this.totalContactsSend
+    console.log('DATA BLOB', data);
+    this.reportService.exportToPdf(data).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const date = new Date();
+        const month = [
+          'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
+
+        const fileName = `reporte-${date.getDate()}-${month[date.getMonth()]}-${date.getFullYear()}-hora_${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}.pdf`;
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+
+      },
+      error: (err) => console.error('Error al exportar PDF:', err)
+    })
+
+  }
+
+  exportToCsvContacsSend() {
+    console.log('export csv');
+  }
 }

@@ -62,8 +62,8 @@ export class SendMessageComponent implements OnInit {
   ) { }
   ngOnInit() {
     this.messageId = parseInt(this.route.snapshot.paramMap.get('id')!);
-    this.idBranchSelected = this.localStorage.getItem('branchId');
-    if (this.idBranchSelected) {
+/*     this.idBranchSelected = this.localStorage.getItem('branchId');
+ */    if (this.idBranchSelected) {
       /*   this.loadBranchesById(this.idBranchSelected!);
         this.getContactsByBranch(this.idBranchSelected!); */
     }
@@ -185,12 +185,12 @@ export class SendMessageComponent implements OnInit {
     if (event.value) {
       console.log('CHANGE', event);
       console.log('CHANGE', event.value.id);
-      this.localStorage.setItem('branchId', (event.value.id));
-      this.getContactsByBranch(event.value.id);
+/*       this.localStorage.setItem('branchId', (event.value.id));
+ */      this.getContactsByBranch(event.value.id);
     } else {
       console.log('No hay sucursal seleccionada');
-      this.localStorage.removeItem('branchId');
-      // O cualquier lógica que requieras cuando el usuario limpia la selección
+      /*       this.localStorage.removeItem('branchId');
+       */      // O cualquier lógica que requieras cuando el usuario limpia la selección
     }
   }
 
@@ -227,5 +227,11 @@ export class SendMessageComponent implements OnInit {
       branch: this.selectedBranch!,
       contacts: this.selectedContacts,
     }
+  }
+
+  closeModal(event: any) {
+    console.log('Cerrando modal...', event);
+    this.isScheduled = event;
+    console.log('Event: ', event);
   }
 }

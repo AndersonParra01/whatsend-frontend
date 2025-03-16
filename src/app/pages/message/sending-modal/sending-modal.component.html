@@ -57,7 +57,29 @@
         [value]="totalContactsSend"
         [tableStyle]="{ 'min-width': '50rem' }"
         [scrollable]="true"
+        [lazy]="true"
       >
+        <ng-template #caption>
+          <div class="flex justify-end gap-2">
+            <p-button
+              icon="pi pi-file-pdf"
+              severity="danger"
+              size="small"
+              [rounded]="true"
+              [outlined]="true"
+              (click)="exporTotPdfContactsSend()"
+            />
+            <p-button
+              icon="pi pi-file-excel"
+              severity="success"
+              size="small"
+              [rounded]="true"
+              [outlined]="true"
+              (click)="exportToCsvContacsSend()"
+            />
+          </div>
+        </ng-template>
+
         <ng-template #header>
           <tr>
             <th>Nombres</th>
