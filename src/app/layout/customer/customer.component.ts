@@ -1,24 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ContentComponent } from './content/content.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { TopbarComponent } from './topbar/topbar.component';
+import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-customer',
-  imports: [ContentComponent, SidebarComponent, TopbarComponent],
+  imports: [ContentComponent, SidebarComponent, TopbarComponent, RouterOutlet, CommonModule],
   templateUrl: './customer.component.html',
   styleUrl: './customer.component.css',
 })
 export class CustomerComponent {
-  // Estado del sidebar y modo oscuro
-  isSidebarOpen = true;
-  isDarkMode = false;
+
+  sidebarCollapsed: boolean = false;
+  mobileSidebarVisible: boolean = false;
+  @HostListener('window:resize')
+  onResize() {
+    // Si se redimensiona a ancho mayor o igual al md breakpoint, ocultamos el sidebar móvil
+    if (window.innerWidth >= 768) {
+      this.mobileSidebarVisible = false;
+    }
+  }
 
   toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
+    if (window.innerWidth < 768) {
+      this.sidebarCollapsed = !this.sidebarCollapsed;
+
+      // Modo móvil: alternar visibilidad del sidebar (overlay)
+      this.mobileSidebarVisible = !this.mobileSidebarVisible;
+    } else {
+      // Modo escritorio/tablet: alternar colapsado/expandido
+      this.sidebarCollapsed = !this.sidebarCollapsed;
+    }
   }
 
-  toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-  }
+
 }

@@ -1,14 +1,9 @@
-<div class="flex items-center justify-between shadow-2xs border-gray-200 p-4">
-  <!-- Sección Izquierda: Botón de menú (responsive) + Título -->
+<!-- <div class="flex items-center justify-between shadow-2xs border-gray-200 p-4">
   <div class="flex items-center space-x-2">
     <span class="text-xl font-semibold">Envio SMS WhatsApp</span>
   </div>
 
-  <!-- Sección Derecha: Botón Dark Mode, Config, User -->
   <div class="flex items-center space-x-4 cursor-pointer">
-    <!-- <button class="p-2 text-xl font-semibold">
-       Salir
-    </button> -->
     <ng-template #end>
       <button
         pRipple
@@ -26,4 +21,37 @@
       </button>
     </ng-template>
   </div>
-</div>
+</div> -->
+
+<nav
+  [ngClass]="{ 'lg:ml-64': !sidebarCollapsed, 'lg:ml-16': sidebarCollapsed }"
+  class="fixed top-0 left-0 right-0 z-10 flex items-center h-16 justify-between bg-white shadow px-6 py-3 transition-all duration-300 ease-in-out"
+>
+  <!-- Botón hamburguesa para móviles -->
+  <button class="p-2" (click)="toggleSidebar.emit()">
+    <i class="pi pi-bars text-2xl"></i>
+  </button>
+
+  <!-- Logo -->
+  <img src="assets/logo.png" alt="Logo" class="h-8 ml-2" />
+
+  <!-- Caja de búsqueda -->
+  <div class="hidden md:block flex-1 px-6 max-w-md">
+    <input
+      type="text"
+      pInputText
+      placeholder="Buscar..."
+      class="w-full border border-gray-300 rounded px-4 py-2"
+    />
+  </div>
+
+  <!-- Iconos de notificaciones y perfil -->
+  <div class="flex items-center">
+    <button class="p-2 mr-4">
+      <i class="pi pi-bell text-xl"></i>
+    </button>
+    <button class="p-2">
+      <i class="pi pi-user text-xl"></i>
+    </button>
+  </div>
+</nav>

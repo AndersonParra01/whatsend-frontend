@@ -1,23 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-topbar',
-  imports: [AvatarModule],
+  imports: [AvatarModule, InputTextModule, CommonModule],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.css',
 })
 export class TopbarComponent {
-  @Input() isDarkMode = false;
-
   @Output() toggleSidebar = new EventEmitter<void>();
-  @Output() toggleDarkMode = new EventEmitter<void>();
+  @Input() sidebarCollapsed = false; // Recibe el estado del sidebar
+
 
   onToggleSidebar() {
     this.toggleSidebar.emit();
   }
 
-  onToggleDarkMode() {
-    this.toggleDarkMode.emit();
-  }
 }

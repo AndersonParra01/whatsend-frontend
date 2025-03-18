@@ -48,7 +48,6 @@ export class SocketService {
   listen<T>(eventName: string): Observable<T> {
     return new Observable((subscriber) => {
       this.socket.on(eventName, (data: T) => {
-        console.log('DATA RECEIVED BACKEND', data);
         subscriber.next(data);
       });
     });
@@ -107,4 +106,12 @@ export class SocketService {
       this.socket.connect();
     }
   }
+
+  logout() {
+    this.socket.on('logout', (data) => {
+      console.log('logout', data);
+      // Cerrar sesión y redireccionar al login
+    })
+  }
+
 }

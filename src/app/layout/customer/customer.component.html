@@ -3,20 +3,35 @@
   flex: usa flexbox
   overflow-hidden: evita scroll adicional global
 -->
-<div class="flex h-screen w-screen overflow-x-auto">
-  <!-- Sidebar (fijo) -->
+<!-- <div class="flex h-screen w-screen overflow-x-auto">
   <app-sidebar class="w-64"></app-sidebar>
 
-  <!-- Contenedor derecho (topbar + contenido) -->
-  <!-- flex-col: distribuye hijos en columna, flex-1: ocupa el resto de la pantalla -->
   <div class="flex flex-col flex-1 h-full">
-    <!-- Topbar (barra superior) -->
     <app-topbar class="h-16"></app-topbar>
 
-    <!-- Contenedor para el contenido principal -->
-    <!-- flex-1: ocupa el resto del espacio vertical, overflow-y-auto: scroll vertical -->
     <div class="flex-1 overflow-y-auto mt-4">
       <app-content></app-content>
     </div>
   </div>
+</div>
+ -->
+<app-topbar
+  [sidebarCollapsed]="sidebarCollapsed"
+  (toggleSidebar)="toggleSidebar()"
+></app-topbar>
+
+<div class="flex">
+  <!-- Componente Sidebar -->
+  <app-sidebar
+    [collapsed]="sidebarCollapsed"
+    [(mobileVisible)]="mobileSidebarVisible"
+  ></app-sidebar>
+
+  <!-- Área de contenido principal mejorada -->
+  <main
+    [ngClass]="{ 'lg:ml-64': !sidebarCollapsed, 'lg:ml-16': sidebarCollapsed }"
+    class="flex-1 mt-14 min-h-screen transition-all duration-300 ease-in-out p-6 md:p-8 lg:p-9 max-w-screen-2xl mx-auto bg-amber-500"
+  >
+    <router-outlet></router-outlet>
+  </main>
 </div>

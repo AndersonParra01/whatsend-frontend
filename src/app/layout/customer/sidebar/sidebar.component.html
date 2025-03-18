@@ -1,10 +1,7 @@
-<p-menu [model]="items" class="flex justify-center" styleClass="w-full md:w-60">
+<!-- <p-menu [model]="items" class="flex justify-center" styleClass="w-full md:w-60">
   <ng-template #start>
     <span class="inline-flex items-center gap-1 px-2 py-2">
-      <span class="text-xl font-semibold">
-        Martinizing
-        <!--  <span class="text-3xl">SMS</span> -->
-      </span>
+      <span class="text-xl font-semibold"> Martinizing </span>
     </span>
   </ng-template>
   <ng-template #submenuheader let-item>
@@ -23,3 +20,46 @@
     </a>
   </ng-template>
 </p-menu>
+ -->
+
+<!-- Sidebar en móvil (overlay) usando PrimeNG p-sidebar -->
+<p-drawer
+  [(visible)]="mobileVisible"
+  position="left"
+  [modal]="true"
+  [style]="{ width: '16rem' }"
+  class="md:hidden"
+  (onHide)="mobileVisibleChange.emit(false)"
+>
+  <ul class="py-4">
+    <li *ngFor="let item of menuItems">
+      <a
+        class="flex items-center p-3 hover:bg-gray-700"
+        [routerLink]="item['route']"
+        (click)="mobileVisibleChange.emit(false)"
+      >
+        <i class="{{ item.icon }} mr-2"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    </li>
+  </ul>
+</p-drawer>
+
+<aside
+  class="hidden md:flex flex-col bg-gray-800 text-gray-100 h-screen w-64 fixed transition-all duration-300 ease-in-out left-0 top-0"
+  [ngClass]="{ 'w-64': !collapsed, 'w-16': collapsed }"
+>
+  <ul class="flex-1 py-4">
+    <li *ngFor="let item of menuItems">
+      <a
+        class="flex items-center p-3 hover:bg-gray-700 transition-all"
+        [routerLink]="item['route']"
+        [ngClass]="{ 'justify-center': collapsed }"
+      >
+        <i class="{{ item.icon }} text-base"></i>
+        <!-- Etiqueta del menú, visible solo si sidebar expandido -->
+        <span *ngIf="!collapsed" class="ml-2">{{ item.label }}</span>
+      </a>
+    </li>
+  </ul>
+</aside>
