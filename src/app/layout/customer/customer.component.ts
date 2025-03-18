@@ -1,5 +1,4 @@
 import { Component, HostListener } from '@angular/core';
-import { ContentComponent } from './content/content.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { TopbarComponent } from './topbar/topbar.component';
 import { RouterOutlet } from '@angular/router';
@@ -7,7 +6,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-customer',
-  imports: [ContentComponent, SidebarComponent, TopbarComponent, RouterOutlet, CommonModule],
+  imports: [SidebarComponent, TopbarComponent, RouterOutlet, CommonModule],
   templateUrl: './customer.component.html',
   styleUrl: './customer.component.css',
 })

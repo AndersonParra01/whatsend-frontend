@@ -1,13 +1,16 @@
 import { ApplicationRef, inject, Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 
-import { first, Observable } from 'rxjs';
+import { BehaviorSubject, first, Observable } from 'rxjs';
+import { ClientInfoWhatsApp } from '@app/models/user-whatsapp';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocketService {
   private socket: Socket;
+  private userSubject = new BehaviorSubject<ClientInfoWhatsApp | null>(null);
+  user$ = this.userSubject.asObservable();
 
   constructor() {
     this.socket = io('http://localhost:5000', {
@@ -21,10 +24,13 @@ export class SocketService {
       });
   }
 
+  setUser(user: ClientInfoWhatsApp | null): void {
+    this.userSubject.next(user);
+  }
+
   onQrCode(): Observable<string> {
     return new Observable((observer) => {
       this.socket.on('qr-code', (data) => {
-        console.log('listening on qr-code from FrontEnd', data);
         observer.next(data);
       });
     });
@@ -106,12 +112,4 @@ export class SocketService {
       this.socket.connect();
     }
   }
-
-  logout() {
-    this.socket.on('logout', (data) => {
-      console.log('logout', data);
-      // Cerrar sesión y redireccionar al login
-    })
-  }
-
 }

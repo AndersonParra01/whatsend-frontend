@@ -33,25 +33,55 @@
   </button>
 
   <!-- Logo -->
-  <img src="assets/logo.png" alt="Logo" class="h-8 ml-2" />
+  <!--   <img src="assets/logo.png" alt="Logo" class="h-8 ml-2" /> -->
 
   <!-- Caja de búsqueda -->
   <div class="hidden md:block flex-1 px-6 max-w-md">
-    <input
+    <!-- <input
       type="text"
       pInputText
       placeholder="Buscar..."
       class="w-full border border-gray-300 rounded px-4 py-2"
-    />
+    /> -->
   </div>
 
   <!-- Iconos de notificaciones y perfil -->
-  <div class="flex items-center">
+  <!-- Iconos de notificaciones y perfil -->
+  <div class="flex items-center relative">
     <button class="p-2 mr-4">
       <i class="pi pi-bell text-xl"></i>
     </button>
-    <button class="p-2">
-      <i class="pi pi-user text-xl"></i>
-    </button>
+
+    <div class="relative">
+      <button (click)="toggleMenu()">
+        <i class="pi pi-user text-xl"></i>
+      </button>
+
+      <!-- Menú desplegable -->
+      <div
+        *ngIf="menuOpen"
+        class="absolute right-0 mt-2 w-56 bg-white border shadow-lg rounded-lg transition-all duration-300 ease-in-out transform origin-top-right animate-fade-in"
+      >
+        <!--         <div class="p-4 border-b flex items-center">
+          <img
+            src="assets/user.jpg"
+            alt="User Avatar"
+            class="h-10 w-10 rounded-full"
+          />
+          <div class="ml-3">
+            <p class="font-semibold">Pauline Seitz</p>
+            <p class="text-sm text-gray-500">Web Designer</p>
+          </div>
+        </div> -->
+        <ul class="p-2">
+          <li
+            class="p-2 hover:bg-gray-100 cursor-pointer flex items-center"
+            (click)="logout()"
+          >
+            <i class="pi pi-sign-out mr-2"></i> Cerrar Sesión
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </nav>

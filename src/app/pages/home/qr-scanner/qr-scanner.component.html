@@ -1,11 +1,12 @@
-<div *ngIf="!whatsappConnected" class="flex flex-1">
+<div class="flex flex-1">
   <div
-    class="hidden lg:flex w-1/2 bg-[#00BFA5] text-white flex-col justify-center items-center p-16"
+    *ngIf="!whatsappConnected"
+    class="hidden lg:flex w-1/2 bg-[#00BFA5] text-white flex-col justify-center items-center p-20"
   >
     <div class="mb-4">
-      <!-- Ícono de WhatsApp (opcional, usa primeicons) -->
       <i class="pi pi-whatsapp text-5xl"></i>
     </div>
+
     <h2 class="text-2xl font-bold mb-2">WhatsApp Web</h2>
     <p class="max-w-md text-center leading-relaxed m-4">
       Para usar WhatsApp en tu computadora, abre WhatsApp en tu teléfono, toca
@@ -18,38 +19,66 @@
   </div>
 
   <div class="flex-1 flex flex-col p-4">
-    <!-- Si NO está conectado, muestra QR -->
-    <div *ngIf="!whatsappReady" class="text-center">
+    <div *ngIf="!whatsappConnected" class="text-center">
       <h2 class="text-xl font-semibold text-gray-700 mb-4">
         Escanea el código QR con WhatsApp
       </h2>
 
-      <!-- Si ya tenemos un qrCodeUrl, lo mostramos -->
       <div
         *ngIf="qrCodeUrl; else waitingQR"
         class="border border-gray-300 p-4 rounded-lg shadow-md inline-block"
       >
-        <img [src]="qrCodeUrl" alt="QR Code" class="h-64 w-64 object-contain" />
+        <img
+          [src]="qrCodeUrl"
+          alt="QR Code"
+          class="w-full h-full object-contain"
+        />
       </div>
 
-      <!-- Si NO tenemos qrCodeUrl, mostramos “Esperando QR…” -->
       <ng-template #waitingQR>
         <p class="text-gray-500">Esperando QR...</p>
+        <p class="text-sm text-accent dark:text-dark-accent">
+          El código QR se actualiza en {{ timeLeft }} segundos
+        </p>
       </ng-template>
     </div>
 
-    <!-- Si está conectado, muestra mensaje de éxito -->
-    <div *ngIf="whatsappReady" class="text-center">
+    <div *ngIf="whatsappConnected" class="text-center">
       <h2 class="text-xl font-semibold text-gray-700">
         ¡WhatsApp está conectado! 🎉
       </h2>
-      <p class="text-gray-600">Ya puedes cerrar esta ventana.</p>
+      <pre>
+        {{ userConnected | json }}
+      </pre>
+      <div>
+        <div>
+          <h3>Información de la cuenta:</h3>
+        </div>
+      </div>
+      <div class="space-y-6 animate-fadeIn">
+        <div class="flex items-center space-x-4">
+          <img
+            [src]="userInfo.avatar"
+            alt="Profile Picture"
+            class="w-16 h-16 rounded-full object-cover"
+          />
+          <div>
+            <h2
+              class="text-lg font-semibold text-foreground dark:text-dark-foreground"
+            >
+              {{ userInfo.name }}
+            </h2>
+            <p class="text-accent dark:text-dark-accent">
+              {{ userConnected?.id }}
+            </p>
+          </div>
+        </div>
+        <div class="p-4 bg-muted dark:bg-dark-muted rounded-md">
+          <p class="text-sm text-accent dark:text-dark-accent">
+            {{ userInfo.status }}
+          </p>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
-<div>
-  <div *ngIf="whatsappConnected">
-    <h3>Información de la cuenta:</h3>
   </div>
 </div>

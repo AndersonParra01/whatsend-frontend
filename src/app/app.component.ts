@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
         console.log('WhatsApp user info', info);
         this.whatsappInfo = info;
         this.loggedIn$.next(true);
+        this.socketService.setUser(info);
       },
       error: (error) => {
         this.loggedIn$.next(false);
