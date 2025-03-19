@@ -43,40 +43,46 @@
       </ng-template>
     </div>
 
-    <div *ngIf="whatsappConnected" class="text-center">
-      <h2 class="text-xl font-semibold text-gray-700">
-        ¡WhatsApp está conectado! 🎉
-      </h2>
-      <pre>
-        {{ userConnected | json }}
-      </pre>
-      <div>
-        <div>
-          <h3>Información de la cuenta:</h3>
+    <div
+      *ngIf="whatsappConnected"
+      class="flex justify-center items-center bg-gray-100 p-24"
+    >
+      <!-- Card contenedor -->
+      <div
+        class="bg-white rounded-lg shadow-md p-6 max-w-md w-full animate-fadeIn"
+      >
+        <!-- Encabezado -->
+        <div class="text-center mb-4">
+          <h2 class="text-xl font-semibold text-gray-700">
+            ¡WhatsApp está conectado! 🎉
+          </h2>
+          <p class="text-gray-500">Información de la cuenta</p>
         </div>
-      </div>
-      <div class="space-y-6 animate-fadeIn">
-        <div class="flex items-center space-x-4">
-          <img
-            [src]="userInfo.avatar"
-            alt="Profile Picture"
-            class="w-16 h-16 rounded-full object-cover"
-          />
-          <div>
-            <h2
-              class="text-lg font-semibold text-foreground dark:text-dark-foreground"
-            >
-              {{ userInfo.name }}
-            </h2>
-            <p class="text-accent dark:text-dark-accent">
-              {{ userConnected?.id }}
+
+        <!-- Información de usuario -->
+        <div class="space-y-4">
+          <div class="flex items-center space-x-4">
+            <img
+              [src]="userInfo.avatar"
+              alt="Profile Picture"
+              class="w-16 h-16 rounded-full object-cover"
+            />
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800">
+                {{ userConnected?.name }}
+              </h2>
+              <p class="text-sm text-gray-500">
+                {{ userConnected?.id }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Estado -->
+          <div class="p-4 bg-gray-50 rounded-md">
+            <p class="text-sm text-gray-600">
+              {{ userInfo.status }}
             </p>
           </div>
-        </div>
-        <div class="p-4 bg-muted dark:bg-dark-muted rounded-md">
-          <p class="text-sm text-accent dark:text-dark-accent">
-            {{ userInfo.status }}
-          </p>
         </div>
       </div>
     </div>

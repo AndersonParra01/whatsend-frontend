@@ -1,32 +1,56 @@
-import { Injectable } from '@angular/core';
-
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 @Injectable({
   providedIn: 'root',
 })
 export class LocalstorageService {
-  constructor() { }
+  private platformId!: Object;
 
-  /* setItem(key: string, value: any | null): void {
-    localStorage.setItem(key, JSON.stringify(value));
+  constructor(@Inject(PLATFORM_ID) platformId: Object) {
+    this.platformId = platformId;
   }
-  getItem(key: string) {
+
+  setItem(key: string, value: any): void {
+    try {
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+    } catch (error) {
+      console.log('Error saving local storage: ', error);
+    }
+  }
+
+  getItem<T>(key: string): T | null {
+    // Primero, asegúrate de que se está ejecutando en el navegador
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+
     const item = localStorage.getItem(key);
-    // Si no existe, retorna null
-    if (!item) {
+
+    if (item === null) {
       return null;
     }
 
     try {
-      return JSON.parse(item);
-    } catch (e) {
-      // Si no es JSON válido, simplemente regresamos el `item`.
-      return item;
+      return JSON.parse(item) as T;
+    } catch (error) {
+      console.error('Error parseando el valor de localStorage:', error);
+      return null;
     }
   }
+
+
   removeItem(key: string): void {
-    localStorage.removeItem(key);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(key);
+    }
   }
+
   clear(): void {
-    localStorage.clear();
-  } */
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.clear();
+    }
+  }
+
 }

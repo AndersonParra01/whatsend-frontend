@@ -1,162 +1,164 @@
 <p-toast />
-<p-toolbar styleClass="w-full">
-  <ng-template #start>
-    <p-button
-      label="Nuevo Mensaje"
-      icon="pi pi-plus"
-      class="mr-2"
-      (onClick)="newMessage()"
-      routerLink="new"
-    />
-    <div *ngIf="selectedMessages.length > 0">
+<div class="bg-gray-100 p-2">
+  <p-toolbar styleClass="w-full">
+    <ng-template #start>
       <p-button
-        severity="danger"
-        label="Eliminar Mensajes"
-        icon="pi pi-trash"
-        outlined
-        (onClick)="deleteSelectedProducts()"
+        label="Nuevo Mensaje"
+        icon="pi pi-plus"
+        class="mr-2"
+        (onClick)="newMessage()"
+        routerLink="new"
       />
-    </div>
-  </ng-template>
+      <div *ngIf="selectedMessages.length > 0">
+        <p-button
+          severity="danger"
+          label="Eliminar Mensajes"
+          icon="pi pi-trash"
+          outlined
+          (onClick)="deleteSelectedProducts()"
+        />
+      </div>
+    </ng-template>
 
-  <ng-template #end>
-    <p-fileUpload
-      mode="basic"
-      accept="image/*"
-      [maxFileSize]="1000000"
-      label="Import"
-      chooseLabel="Import"
-      auto
-      customUpload
-      class="mr-2 inline-block"
-      [chooseButtonProps]="{ severity: 'secondary' }"
-    />
-    <p-button
-      label="Export"
-      icon="pi pi-upload"
-      severity="secondary"
-      (onClick)="exportCSV()"
-    />
-  </ng-template>
-</p-toolbar>
+    <ng-template #end>
+      <p-fileUpload
+        mode="basic"
+        accept="image/*"
+        [maxFileSize]="1000000"
+        label="Import"
+        chooseLabel="Import"
+        auto
+        customUpload
+        class="mr-2 inline-block"
+        [chooseButtonProps]="{ severity: 'secondary' }"
+      />
+      <p-button
+        label="Export"
+        icon="pi pi-upload"
+        severity="secondary"
+        (onClick)="exportCSV()"
+      />
+    </ng-template>
+  </p-toolbar>
 
-<div class="card">
-  <div class="flex justify-between items-center mb-4">
-    <h1 class="m-0">Mensajes</h1>
-    <div class="flex gap-2">
-      <div class="relative">
-        <p-inputGroup>
-          <p-inputgroup-addon>
-            <i class="pi pi-search"></i>
-          </p-inputgroup-addon>
-          <input
-            pInputText
-            [(ngModel)]="searchQuery"
-            (keyup.enter)="onSearchChange()"
-            placeholder="Buscar sucursales..."
-          />
-        </p-inputGroup>
+  <div class="card">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="m-0">Mensajes</h1>
+      <div class="flex gap-2">
+        <div class="relative">
+          <p-inputGroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-search"></i>
+            </p-inputgroup-addon>
+            <input
+              pInputText
+              [(ngModel)]="searchQuery"
+              (keyup.enter)="onSearchChange()"
+              placeholder="Buscar sucursales..."
+            />
+          </p-inputGroup>
+        </div>
       </div>
     </div>
+    <p-table
+      #dt
+      [value]="messages"
+      [rows]="rows"
+      [totalRecords]="totalRecords"
+      [loading]="loading"
+      [paginator]="true"
+      [lazy]="true"
+      [rowHover]="true"
+      [(selection)]="selectedMessages"
+      dataKey="id"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} mensajes"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      styleClass="p-datatable-sm"
+      [scrollable]="true"
+      [loading]="loading"
+      [(selection)]="selectedMessages"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3rem">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+          <th pSortableColumn="message">
+            Mensaje <p-sortIcon field="message"></p-sortIcon>
+          </th>
+          <th pSortableColumn="createdAt">
+            Fecha Creación <p-sortIcon field="createdAt"></p-sortIcon>
+          </th>
+          <th pSortableColumn="status">
+            Estado <p-sortIcon field="status"></p-sortIcon>
+          </th>
+          <th style="width: 8rem">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-message>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="message"></p-tableCheckbox>
+          </td>
+          <td>{{ message.id }}</td>
+          <td>{{ message.message }}</td>
+          <td>{{ message.createdAt | date : "dd/MM/yyyy HH:mm" }}</td>
+          <td>
+            <p-tag
+              [severity]="message.status === 'Activo' ? 'success' : 'warn'"
+              [value]="message.status"
+            >
+            </p-tag>
+          </td>
+          <td>
+            <div class="flex gap-2 justify-content-center">
+              <button
+                pButton
+                icon="pi pi-pencil"
+                [rounded]="true"
+                [outlined]="true"
+                class="p-button-rounded p-button-warning p-button-sm"
+                (click)="editMessage(message)"
+              ></button>
+              <button
+                pButton
+                icon="pi pi-trash"
+                severity="danger"
+                [rounded]="true"
+                [outlined]="true"
+                class="p-button-rounded p-button-danger p-button-sm"
+                (click)="onDelete(message)"
+              ></button>
+              <button
+                pButton
+                icon="pi pi-send"
+                severity="help"
+                [rounded]="true"
+                [outlined]="true"
+                (click)="messageToSend(message)"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="text-center p-4">
+            <div class="flex flex-col items-center justify-center">
+              <i
+                class="pi pi-inbox mb-3 justify-center items-center"
+                style="font-size: 2rem"
+              ></i>
+              <span>No se encontraron mensajes</span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
-  <p-table
-    #dt
-    [value]="messages"
-    [rows]="rows"
-    [totalRecords]="totalRecords"
-    [loading]="loading"
-    [paginator]="true"
-    [lazy]="true"
-    [rowHover]="true"
-    [(selection)]="selectedMessages"
-    dataKey="id"
-    [showCurrentPageReport]="true"
-    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} mensajes"
-    [rowsPerPageOptions]="[10, 25, 50]"
-    styleClass="p-datatable-sm"
-    [scrollable]="true"
-    [loading]="loading"
-    [(selection)]="selectedMessages"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th style="width: 3rem">
-          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-        </th>
-        <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
-        <th pSortableColumn="message">
-          Mensaje <p-sortIcon field="message"></p-sortIcon>
-        </th>
-        <th pSortableColumn="createdAt">
-          Fecha Creación <p-sortIcon field="createdAt"></p-sortIcon>
-        </th>
-        <th pSortableColumn="status">
-          Estado <p-sortIcon field="status"></p-sortIcon>
-        </th>
-        <th style="width: 8rem">Acciones</th>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-message>
-      <tr>
-        <td>
-          <p-tableCheckbox [value]="message"></p-tableCheckbox>
-        </td>
-        <td>{{ message.id }}</td>
-        <td>{{ message.message }}</td>
-        <td>{{ message.createdAt | date : "dd/MM/yyyy HH:mm" }}</td>
-        <td>
-          <p-tag
-            [severity]="message.status === 'Activo' ? 'success' : 'warn'"
-            [value]="message.status"
-          >
-          </p-tag>
-        </td>
-        <td>
-          <div class="flex gap-2 justify-content-center">
-            <button
-              pButton
-              icon="pi pi-pencil"
-              [rounded]="true"
-              [outlined]="true"
-              class="p-button-rounded p-button-warning p-button-sm"
-              (click)="editMessage(message)"
-            ></button>
-            <button
-              pButton
-              icon="pi pi-trash"
-              severity="danger"
-              [rounded]="true"
-              [outlined]="true"
-              class="p-button-rounded p-button-danger p-button-sm"
-              (click)="onDelete(message)"
-            ></button>
-            <button
-              pButton
-              icon="pi pi-send"
-              severity="help"
-              [rounded]="true"
-              [outlined]="true"
-              (click)="messageToSend(message)"
-            ></button>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="6" class="text-center p-4">
-          <div class="flex flex-col items-center justify-center">
-            <i
-              class="pi pi-inbox mb-3 justify-center items-center"
-              style="font-size: 2rem"
-            ></i>
-            <span>No se encontraron mensajes</span>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
 </div>
 <p-confirmDialog [style]="{ width: '450px' }" />
