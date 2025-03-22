@@ -183,4 +183,7 @@ export class SendingModalComponent implements OnChanges {
   exportToCsvContacsSend() {
     console.log('export csv');
   }
+
+  exitModalAndClean() {
+  }
 }
