@@ -1,5 +1,5 @@
 <p-toast />
-<div class="bg-gray-100 p-2">
+<div class="">
   <p-toolbar styleClass="w-full">
     <ng-template #start>
       <p-button
@@ -30,14 +30,14 @@
         auto
         customUpload
         class="mr-2 inline-block"
-        [chooseButtonProps]="{ severity: 'secondary' }"
+        [chooseButtonProps]="{ severity: 'warning' }"
       />
-      <p-button
+      <!-- <p-button
         label="Export"
         icon="pi pi-upload"
         severity="secondary"
         (onClick)="exportCSV()"
-      />
+      /> -->
     </ng-template>
   </p-toolbar>
 
@@ -74,10 +74,12 @@
       [showCurrentPageReport]="true"
       currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} mensajes"
       [rowsPerPageOptions]="[10, 25, 50]"
-      styleClass="p-datatable-sm"
       [scrollable]="true"
       [loading]="loading"
       [(selection)]="selectedMessages"
+      [showGridlines]="true"
+      scrollHeight="flex"
+      [stripedRows]="true"
     >
       <ng-template pTemplate="header">
         <tr>
@@ -104,7 +106,11 @@
             <p-tableCheckbox [value]="message"></p-tableCheckbox>
           </td>
           <td>{{ message.id }}</td>
-          <td>{{ message.message }}</td>
+          <td>
+            {{ message.message | slice : 0 : 80 }}
+            {{ message.message.length > 15 ? "..." : "" }}
+          </td>
+
           <td>{{ message.createdAt | date : "dd/MM/yyyy HH:mm" }}</td>
           <td>
             <p-tag

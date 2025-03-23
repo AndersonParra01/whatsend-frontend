@@ -30,7 +30,7 @@ import { ExportFilesService } from '@app/services/export-files.service';
     DialogModule,
     ToastModule,
     ButtonModule,
-    Tag
+    Tag,
   ],
   providers: [MessageService],
   templateUrl: './sending-modal.component.html',
@@ -67,31 +67,37 @@ export class SendingModalComponent implements OnChanges {
     console.log('changes: ', changes);
     if (changes['data'] && this.data?.contacts) {
       this.totalMessages = this.data?.contacts?.length;
-      this.totalContactsSend
-      this.value
+      this.totalContactsSend;
+      this.value;
     }
   }
 
   startSending(): void {
     console.log('start sending');
-    const numbersOfContacts = this.data?.contacts?.map(contact => contact.phone) || []
+    const numbersOfContacts =
+      this.data?.contacts?.map((contact) => contact.phone) || [];
     this.totalContacts = numbersOfContacts.length;
     this.sentCount = 0;
     this.value = 0;
-    console.log('numbersByContacts: ', numbersOfContacts)
+    console.log('numbersByContacts: ', numbersOfContacts);
 
     const intervaleSeconds = this.data?.intervale;
     // Tiempo total estimado del envío (contactos * intervalo en segundos)
-    this.estimatedTotalTimeMs = (this.totalContacts * intervaleSeconds!) * 1000;
+    this.estimatedTotalTimeMs = this.totalContacts * intervaleSeconds! * 1000;
 
-    this.socketService.sendBulkMessages(numbersOfContacts, this.data?.message!, this.data?.intervale!)
+    this.socketService.sendBulkMessages(
+      numbersOfContacts,
+      this.data?.message!,
+      this.data?.intervale!
+    );
     const updateFrequencyMs = 200; // actualización visual cada 200 ms (0.2 seg)
     const totalSteps = this.estimatedTotalTimeMs / updateFrequencyMs;
     const increment = 100 / totalSteps;
     // Inicia la barra de progreso visual estimada
     this.progressInterval = setInterval(() => {
       this.value += increment;
-      if (this.value >= 99) { // evitar completar antes del resultado real
+      if (this.value >= 99) {
+        // evitar completar antes del resultado real
         this.value = 99;
         clearInterval(this.progressInterval);
       }
@@ -103,14 +109,16 @@ export class SendingModalComponent implements OnChanges {
         console.log('JSON RESULT', result);
         this.sentCount = result.length; // suponiendo que result es el array de respuestas
 
-        const dataTransformer: TotalContactsSend[] = result.map(contact => ({
-          names: this.data?.contacts.find(c => c.phone === contact.number)?.names || '',
+        const dataTransformer: TotalContactsSend[] = result.map((contact) => ({
+          names:
+            this.data?.contacts.find((c) => c.phone === contact.number)
+              ?.names || '',
           phone: contact.number,
           branch: this.data?.branch.name || '',
           status: contact.status,
-        }))
+        }));
         console.log('data transformer: ', dataTransformer);
-        this.totalContactsSend = dataTransformer
+        this.totalContactsSend = dataTransformer;
 
         // Aquí verificas si ya recibiste todas las respuestas
         if (this.sentCount >= this.totalContacts) {
@@ -127,7 +135,7 @@ export class SendingModalComponent implements OnChanges {
       error: (err) => {
         console.error('Error durante el envío:', err);
         clearInterval(this.progressInterval);
-      }
+      },
     });
   }
 
@@ -139,9 +147,22 @@ export class SendingModalComponent implements OnChanges {
 
   closeModal() {
     this.close.emit(false);
+    this.totalContactsSend = [];
+    this.value = 0;
+    this.sentCount = 0;
+    clearInterval(this.progressInterval);
   }
 
-  getSeverityByStatus(status: string): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | undefined {
+  getSeverityByStatus(
+    status: string
+  ):
+    | 'success'
+    | 'secondary'
+    | 'info'
+    | 'warn'
+    | 'danger'
+    | 'contrast'
+    | undefined {
     switch (status) {
       case 'Ok':
         return 'success';
@@ -156,7 +177,7 @@ export class SendingModalComponent implements OnChanges {
 
   exporTotPdfContactsSend() {
     console.log('export pdf');
-    const data = this.totalContactsSend
+    const data = this.totalContactsSend;
     console.log('DATA BLOB', data);
     this.reportService.exportToPdf(data).subscribe({
       next: (blob) => {
@@ -164,20 +185,29 @@ export class SendingModalComponent implements OnChanges {
         const a = document.createElement('a');
         const date = new Date();
         const month = [
-          'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+          'Enero',
+          'Febrero',
+          'Marzo',
+          'Abril',
+          'Mayo',
+          'Junio',
+          'Julio',
+          'Agosto',
+          'Septiembre',
+          'Octubre',
+          'Noviembre',
+          'Diciembre',
         ];
 
-        const fileName = `reporte-${date.getDate()}-${month[date.getMonth()]}-${date.getFullYear()}-hora_${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}.pdf`;
+        const fileName = `reporte-${date.getDate()}-${month[date.getMonth()]
+          }-${date.getFullYear()}-hora_${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}.pdf`;
         a.href = url;
         a.download = fileName;
         a.click();
         window.URL.revokeObjectURL(url);
-
       },
-      error: (err) => console.error('Error al exportar PDF:', err)
-    })
-
+      error: (err) => console.error('Error al exportar PDF:', err),
+    });
   }
 
   exportToCsvContacsSend() {
@@ -185,5 +215,10 @@ export class SendingModalComponent implements OnChanges {
   }
 
   exitModalAndClean() {
+    this.close.emit(false);
+    this.totalContactsSend = [];
+    this.value = 0;
+    this.sentCount = 0;
+    clearInterval(this.progressInterval);
   }
 }

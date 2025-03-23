@@ -45,7 +45,13 @@
     />
   </ng-template>
 </p-toolbar>
-<p-table [value]="customer" [tableStyle]="{ 'min-width': '50rem' }">
+<p-table
+  [value]="customer"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [showGridlines]="true"
+  scrollHeight="flex"
+  [stripedRows]="true"
+>
   <ng-template #header>
     <tr>
       <th>N°</th>

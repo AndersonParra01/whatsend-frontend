@@ -1,4 +1,4 @@
-<div class="container bg-gray-100 p-2">
+<div class="container">
   <!-- Encabezado del Dashboard -->
   <div class="mb-6">
     <h1 class="text-3xl font-bold mb-2">Panel de Mensajería</h1>
@@ -96,7 +96,10 @@
         [value]="stats.recentMessages"
         [rows]="5"
         responsiveLayout="scroll"
-        styleClass="p-datatable-sm"
+        [scrollable]="true"
+        scrollHeight="flex"
+        [showGridlines]="true"
+        [stripedRows]="true"
       >
         <ng-template pTemplate="header">
           <tr>

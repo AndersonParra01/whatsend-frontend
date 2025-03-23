@@ -58,9 +58,15 @@
         [tableStyle]="{ 'min-width': '50rem' }"
         [scrollable]="true"
         [lazy]="true"
+        [showGridlines]="true"
+        scrollHeight="flex"
+        [stripedRows]="true"
       >
         <ng-template #caption>
-          <div class="flex justify-end gap-2">
+          <div
+            *ngIf="totalContactsSend.length > 0"
+            class="flex justify-end gap-2"
+          >
             <p-button
               icon="pi pi-file-pdf"
               severity="danger"
@@ -120,10 +126,12 @@
       </p-table>
     </div>
   </div>
-  <div class="flex justify-end gap-2">
+  <div class="flex justify-end gap-2 p-4">
     <p-button label="Iniciar" severity="secondary" (click)="startSending()" />
-    <p-button label="Pausar" (click)="pauseSending()" />
-    <p-button label="Cancelar" (click)="pauseSending()" />
-    <p-button label="Salir" (click)="pauseSending()" />
+    <!--     <p-button label="Pausar" (click)="pauseSending()" />
+ -->
+    <!--     <p-button label="Cancelar" (click)="pauseSending()" />
+ -->
+    <p-button label="Salir" (click)="exitModalAndClean()" severity="danger" />
   </div>
 </p-dialog>
