@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client';
 
 import { BehaviorSubject, first, Observable } from 'rxjs';
 import { ClientInfoWhatsApp } from '@app/models/user-whatsapp';
+import { environment } from '../../enviroments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class SocketService {
   user$ = this.userSubject.asObservable();
 
   constructor() {
-    this.socket = io('http://localhost:5000', {
+    this.socket = io(environment.backendUrl, {
       autoConnect: false,
     });
     inject(ApplicationRef)

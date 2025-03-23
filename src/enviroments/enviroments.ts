@@ -4,8 +4,7 @@
 const host = 'http://localhost:5000';
 export const Environment = {
   production: false,
-  host,
+  backendUrl: host,
   api: host + '/api/v1',
-
 };
 

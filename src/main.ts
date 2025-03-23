@@ -6,7 +6,6 @@ import { routes } from './app/app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { providePrimeNG } from 'primeng/config';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { LOCALE_ID } from '@angular/core';
 
 bootstrapApplication(AppComponent, {
   providers: [
