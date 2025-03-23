@@ -61,7 +61,6 @@
       </div>
     </div>
     <p-table
-      #dt
       [value]="messages"
       [rows]="rows"
       [totalRecords]="totalRecords"
@@ -70,12 +69,8 @@
       [lazy]="true"
       [rowHover]="true"
       [(selection)]="selectedMessages"
-      dataKey="id"
-      [showCurrentPageReport]="true"
-      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} mensajes"
       [rowsPerPageOptions]="[10, 25, 50]"
       [scrollable]="true"
-      [loading]="loading"
       [(selection)]="selectedMessages"
       [showGridlines]="true"
       scrollHeight="flex"

@@ -136,4 +136,9 @@ export class CustomerListComponent implements OnInit {
     this.first = event.first;
     this.rows = event.rows;
   }
+
+  filterCustomers(event: Customer[]) {
+    console.log('Filtering customers', event);
+    this.customer = event
+  }
 }

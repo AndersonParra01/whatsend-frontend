@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ConfirmationService,
-  LazyLoadEvent,
   MessageService as MessagePrimeNg,
 } from 'primeng/api';
 import { TableModule } from 'primeng/table';
@@ -70,7 +69,7 @@ export class MessageComponent {
   selectedMessages: Message[] = [];
   currentPage = 1;
   totalPages = 1;
-  searchQuery = ''; // Aquí guardas lo que el usuario escriba para filtrar
+  searchQuery = '';
 
   messages: Message[] = [];
   cols!: Column[];
@@ -117,7 +116,6 @@ export class MessageComponent {
     }
   }
 
-  // Si quieres filtrar cuando el usuario escribe algo:
   onSearchChange(): void {
     // Reiniciar a la primera página
     this.currentPage = 1;
@@ -160,8 +158,7 @@ export class MessageComponent {
     })
   }
   exportCSV() {
-    /*     this.dt.exportCSV();
-     */
+
   }
 
   editMessage(message: Message) {
@@ -181,6 +178,8 @@ export class MessageComponent {
       icon: 'pi pi-exclamation-triangle',
       rejectButtonProps: {
         label: 'Cancelar',
+        severity: 'danger',
+        outlined: true,
       },
       acceptButtonProps: {
         label: 'Confirmar',

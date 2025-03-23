@@ -8,7 +8,7 @@
 <!--   [isUpdate]="true" -->
 <p-toolbar styleClass="w-full">
   <ng-template #start>
-    <app-search></app-search>
+    <app-search (customers)="filterCustomers($event)"></app-search>
   </ng-template>
 
   <ng-template #end>
@@ -92,6 +92,19 @@
           [outlined]="true"
           (click)="deleteCustomer(customer)"
         />
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="6" class="text-center p-4">
+        <div class="flex flex-col items-center justify-center">
+          <i
+            class="pi pi-inbox mb-3 justify-center items-center"
+            style="font-size: 2rem"
+          ></i>
+          <span>No se encontraron los contactos</span>
+        </div>
       </td>
     </tr>
   </ng-template>

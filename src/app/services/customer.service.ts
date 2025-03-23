@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Environment as env } from '../../enviroments/enviroments';
 import { Customer } from '@app/models/customers';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,9 @@ export class CustomerService {
     return this.http.get<Customer[]>(`${this.apiUrl}/findByBranch/${branchId}`);
   }
 
+  searchCustomer(name: string): Observable<Customer[]> {
+    console.log('Search service: ', name);
+    return this.http.get<Customer[]>(`${this.apiUrl}/search/${name}`);
+  }
 
 }

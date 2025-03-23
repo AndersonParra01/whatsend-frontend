@@ -3,7 +3,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  NgZone,
   OnChanges,
   Output,
   SimpleChanges,
@@ -15,11 +14,13 @@ import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { DataSend } from '@app/models/dataSend';
-import { MessageService } from 'primeng/api';
 import { SocketService } from '@app/services/socket.service';
 import { TotalContactsSend } from '@app/models/totalContactsSend';
 import { Tag } from 'primeng/tag';
 import { ExportFilesService } from '@app/services/export-files.service';
+import { DeliveryService } from '@app/services/delivery.service';
+import { Delivery } from '@app/models/delivery';
+import { MessageService } from '@app/services/message.service';
 
 @Component({
   selector: 'app-sending-modal',
@@ -32,7 +33,7 @@ import { ExportFilesService } from '@app/services/export-files.service';
     ButtonModule,
     Tag,
   ],
-  providers: [MessageService],
+  providers: [],
   templateUrl: './sending-modal.component.html',
   styleUrl: './sending-modal.component.css',
 })
@@ -57,11 +58,13 @@ export class SendingModalComponent implements OnChanges {
   progressInterval: any;
   totalContactsSend: TotalContactsSend[] = [];
 
+  deliverySend: Delivery | null = null;
+
   constructor(
-    private ngZone: NgZone,
-    private messagePrimeNg: MessageService,
     private socketService: SocketService,
-    private reportService: ExportFilesService
+    private reportService: ExportFilesService,
+    private deliveryService: DeliveryService,
+    private messageService: MessageService
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
     console.log('changes: ', changes);
@@ -119,6 +122,33 @@ export class SendingModalComponent implements OnChanges {
         }));
         console.log('data transformer: ', dataTransformer);
         this.totalContactsSend = dataTransformer;
+
+        const idMessage = 1
+        const messageOne = this.messageService.getFindById(idMessage).subscribe({
+          next: (message) => {
+            console.log('Message found: ', message);
+
+          },
+          error: (err) => {
+            console.error('Error finding message:', err);
+          },
+        })
+
+        /* this.deliverySend = {
+        message: this.data?.message!,
+        client: this.data?.branch,
+        sent_at: new Date(),
+        status: '',
+      }; */
+
+        /*   this.deliveryService.createDelivery(this.deliverySend).subscribe({
+            next: (delivery) => {
+              console.log('Delivery created: ', delivery);
+            },
+            error: (err) => {
+              console.error('Error creating delivery:', err);
+            },
+          }); */
 
         // Aquí verificas si ya recibiste todas las respuestas
         if (this.sentCount >= this.totalContacts) {
