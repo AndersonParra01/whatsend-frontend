@@ -39,7 +39,7 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/enviroments/environment.ts",
+                  "replace": "src/enviroments/enviroments.ts",
                   "with": "src/enviroments/environment.prod.ts"
                 }
               ],
@@ -47,8 +47,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
