@@ -1,28 +1,3 @@
-<!-- <div class="flex items-center justify-between shadow-2xs border-gray-200 p-4">
-  <div class="flex items-center space-x-2">
-    <span class="text-xl font-semibold">Envio SMS WhatsApp</span>
-  </div>
-
-  <div class="flex items-center space-x-4 cursor-pointer">
-    <ng-template #end>
-      <button
-        pRipple
-        class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200"
-      >
-        <p-avatar
-          image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-          class="mr-2"
-          shape="circle"
-        />
-        <span class="inline-flex flex-col">
-          <span class="font-bold">Amy Elsner</span>
-          <span class="text-sm">Admin</span>
-        </span>
-      </button>
-    </ng-template>
-  </div>
-</div> -->
-
 <nav
   [ngClass]="{ 'lg:ml-64': !sidebarCollapsed, 'lg:ml-16': sidebarCollapsed }"
   class="fixed top-0 left-0 right-0 z-10 flex items-center h-16 justify-between bg-white shadow px-6 py-3 transition-all duration-300 ease-in-out"
@@ -46,8 +21,14 @@
   </div>
 
   <!-- Iconos de notificaciones y perfil -->
-  <!-- Iconos de notificaciones y perfil -->
   <div class="flex items-center relative">
+    <button
+      pButton
+      icon="{{ theme.isDarkTheme() ? 'pi pi-sun' : 'pi pi-moon' }}"
+      (click)="toggleTheme()"
+      class="p-button-rounded p-button-secondary"
+    ></button>
+
     <button class="p-2 mr-4">
       <i class="pi pi-bell text-xl"></i>
     </button>
