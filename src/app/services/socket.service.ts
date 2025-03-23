@@ -3,7 +3,7 @@ import { io, Socket } from 'socket.io-client';
 
 import { BehaviorSubject, first, Observable } from 'rxjs';
 import { ClientInfoWhatsApp } from '@app/models/user-whatsapp';
-import { environment } from '../../enviroments/environment.prod';
+import { environment } from '../../enviroments/enviroments';
 
 @Injectable({
   providedIn: 'root',
