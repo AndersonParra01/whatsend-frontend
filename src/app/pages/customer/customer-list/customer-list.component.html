@@ -61,7 +61,7 @@
         <th>Telefono</th>
         <th>Sucursal</th>
         <th>Estado</th>
-        <th>Fecha Creacion</th>
+        <th>Fecha Creación</th>
         <th>Acciones</th>
       </tr>
     </ng-template>
@@ -76,9 +76,11 @@
         <td>
           <p-tag [value]="customer.status"></p-tag>
         </td>
+
         <td>
-          {{ customer.createdAt | date : "EEEE, d MMMM, y, HH:mm:ss" }}
+          {{ customer.createdAt | date : "dd/MM/yyyy HH:mm" }}
         </td>
+
         <td>
           <p-button
             icon="pi pi-pencil"
