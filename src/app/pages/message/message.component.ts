@@ -25,6 +25,7 @@ import { Column } from '../../models/column';
 import { MessageService } from '@app/services/message.service';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputGroupModule } from 'primeng/inputgroup';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-message',
@@ -48,6 +49,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
     InputTextModule,
     InputGroupAddonModule,
     InputGroupModule,
+    CardModule
   ],
   templateUrl: './message.component.html',
   styleUrl: './message.component.css',

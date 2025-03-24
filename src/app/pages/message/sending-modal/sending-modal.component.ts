@@ -21,6 +21,7 @@ import { ExportFilesService } from '@app/services/export-files.service';
 import { DeliveryService } from '@app/services/delivery.service';
 import { Delivery } from '@app/models/delivery';
 import { MessageService } from '@app/services/message.service';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-sending-modal',
@@ -32,6 +33,7 @@ import { MessageService } from '@app/services/message.service';
     ToastModule,
     ButtonModule,
     Tag,
+    CardModule
   ],
   providers: [],
   templateUrl: './sending-modal.component.html',

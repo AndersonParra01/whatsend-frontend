@@ -47,7 +47,7 @@
         <h4 class="font-bold">{{ failedCount }}</h4>
       </div>
     </div>
-    <div>
+    <p-card>
       <p-table
         [paginator]="true"
         [rows]="5"
@@ -125,7 +125,7 @@
           </tr>
         </ng-template>
       </p-table>
-    </div>
+    </p-card>
   </div>
   <div class="flex justify-end gap-2 p-4">
     <p-button label="Iniciar" severity="secondary" (click)="startSending()" />

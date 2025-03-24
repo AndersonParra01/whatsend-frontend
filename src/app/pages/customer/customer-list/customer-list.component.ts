@@ -16,6 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { SearchComponent } from '../search/search.component';
 import { Tag } from 'primeng/tag';
+import { CardModule } from 'primeng/card';
 
 
 @Component({
@@ -32,7 +33,8 @@ import { Tag } from 'primeng/tag';
     InputTextModule,
     FormsModule,
     SearchComponent,
-    Tag
+    Tag,
+    CardModule
   ],
   templateUrl: './customer-list.component.html',
   styleUrl: './customer-list.component.css',
