@@ -47,6 +47,12 @@ export class TopbarComponent {
   }
 
   toggleTheme() {
-    this.theme.togleTheme();
+    if (this.theme.currentTheme === 'dark') {
+      this.theme.setTheme('light');
+    } else if (this.theme.currentTheme === 'light') {
+      this.theme.setTheme('system');
+    } else {
+      this.theme.setTheme('dark');
+    }
   }
 }

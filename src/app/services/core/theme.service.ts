@@ -1,35 +1,61 @@
-import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import {
+  Inject,
+  Injectable,
+  PLATFORM_ID,
+  Renderer2,
+  RendererFactory2,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ThemeService {
+  private platformId!: Object;
   private renderer: Renderer2;
   private isDark = false;
+  private colorTheme: string = 'system';
 
-  constructor(private renderFactory: RendererFactory2) {
+  constructor(
+    public renderFactory: RendererFactory2,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.platformId = platformId;
     this.renderer = renderFactory.createRenderer(null, null);
-    const savedTheme = localStorage.getItem('theme');
-    this.isDark = savedTheme === 'dark';
-    this.updateTheme();
+    if (isPlatformBrowser(this.platformId)) {
+      const savedTheme = localStorage.getItem('theme') || 'system';
+      this.applyTheme();
+    }
   }
 
-  togleTheme(): void {
-    this.isDark = !this.isDark;
-    localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
-    this.updateTheme();
+  setTheme(theme: 'dark' | 'light' | 'system') {
+    if (theme === 'system') {
+      localStorage.removeItem('theme');
+    } else {
+      localStorage.setItem('theme', theme);
+    }
+    this.colorTheme = theme;
+    this.applyTheme();
   }
 
-  updateTheme(): void {
+  private applyTheme() {
     const htmlEl = document.documentElement;
-    if (this.isDark) {
+
+    const theme =
+      this.colorTheme === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : this.colorTheme;
+
+    if (theme === 'dark') {
       this.renderer.addClass(htmlEl, 'dark');
     } else {
       this.renderer.removeClass(htmlEl, 'dark');
     }
   }
 
-  isDarkTheme(): boolean {
-    return this.isDark;
+  get currentTheme(): string {
+    return this.colorTheme;
   }
 }

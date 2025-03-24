@@ -24,7 +24,13 @@
   <div class="flex items-center relative">
     <button
       pButton
-      icon="{{ theme.isDarkTheme() ? 'pi pi-sun' : 'pi pi-moon' }}"
+      [icon]="
+        theme.currentTheme === 'dark'
+          ? 'pi pi-sun'
+          : theme.currentTheme === 'light'
+          ? 'pi pi-moon'
+          : 'pi pi-desktop'
+      "
       (click)="toggleTheme()"
       class="p-button-rounded p-button-secondary"
     ></button>
