@@ -64,7 +64,6 @@
       [value]="messages"
       [rows]="rows"
       [totalRecords]="totalRecords"
-      [loading]="loading"
       [paginator]="true"
       [lazy]="true"
       [rowHover]="true"
@@ -77,6 +76,13 @@
       [stripedRows]="true"
       responsiveLayout="scroll"
     >
+      <ng-template #caption>
+        <p-progressbar
+          *ngIf="loading"
+          mode="indeterminate"
+          [style]="{ height: '6px' }"
+        />
+      </ng-template>
       <ng-template pTemplate="header">
         <tr>
           <th style="width: 3rem">
@@ -157,6 +163,15 @@
               ></i>
               <span>No se encontraron mensajes</span>
             </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="6" class="text-center w-full">
+            <p-progressbar
+              *ngIf="loading"
+              mode="indeterminate"
+              [style]="{ height: '6px' }"
+            />
           </td>
         </tr>
       </ng-template>

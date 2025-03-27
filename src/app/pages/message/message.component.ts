@@ -19,6 +19,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DropdownModule } from 'primeng/dropdown';
 import { Router } from '@angular/router';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 import { Message } from '../../models/messages';
 import { Column } from '../../models/column';
@@ -48,6 +49,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
     InputTextModule,
     InputGroupAddonModule,
     InputGroupModule,
+    ProgressBarModule
   ],
   templateUrl: './message.component.html',
   styleUrl: './message.component.css',
