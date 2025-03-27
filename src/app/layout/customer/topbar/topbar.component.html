@@ -3,7 +3,10 @@
   class="fixed top-0 left-0 right-0 z-10 flex items-center h-16 justify-between bg-white shadow px-6 py-3 transition-all duration-300 ease-in-out"
 >
   <!-- Botón hamburguesa para móviles -->
-  <button class="p-2" (click)="toggleSidebar.emit()">
+  <button
+    class="p-2 text-gray-700 dark:text-gray-200"
+    (click)="toggleSidebar.emit()"
+  >
     <i class="pi pi-bars text-2xl"></i>
   </button>
 
