@@ -1,13 +1,15 @@
 <p-toast />
 <p-confirmdialog />
 
-<div class="container bg-gray-100">
+<div class="container">
   <!-- Título principal -->
-  <div class="flex justify-between items-center mb-6">
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4"
+  >
     <h1 class="text-2xl font-bold">Gestión de sucursales</h1>
-    <div class="flex gap-4">
-      <!-- Campo de búsqueda con PrimeNG InputGroup -->
-      <div class="relative">
+    <div class="flex gap-4 w-full sm:w-auto">
+      <!-- Campo de búsqueda -->
+      <div class="relative flex-grow">
         <p-inputGroup>
           <p-inputgroup-addon>
             <i class="pi pi-search"></i>
@@ -16,7 +18,7 @@
             pInputText
             [(ngModel)]="searchTerm"
             placeholder="Buscar sucursales..."
-            class="bg-card text-foreground"
+            class="bg-card text-foreground w-full"
           />
         </p-inputGroup>
       </div>
@@ -26,13 +28,37 @@
         label="Agregar Sucursal"
         icon="pi pi-plus"
         styleClass="p-button-rounded p-button-primary"
-      >
-      </p-button>
+      ></p-button>
     </div>
   </div>
 
+  <!-- Mostrar Skeleton Loader mientras se cargan los datos -->
+  <div
+    *ngIf="loading"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+  >
+    <div
+      *ngFor="let item of skeletonArray"
+      class="rounded-lg border border-border p-0"
+    >
+      <!-- Skeleton para el header -->
+      <p-skeleton width="100%" height="80px"></p-skeleton>
+      <!-- Skeleton para el contenido -->
+      <div class="p-4">
+        <p-skeleton width="70%" height="20px" class="mb-2"></p-skeleton>
+        <p-skeleton width="90%" height="20px"></p-skeleton>
+      </div>
+      <!-- Skeleton para los botones o acciones -->
+      <div class="p-4 border-t border-border">
+        <p-skeleton width="40%" height="25px"></p-skeleton>
+      </div>
+    </div>
+  </div>
   <!-- Listado de sucursales usando p-card -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div
+    *ngIf="!loading"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+  >
     <p-card
       *ngFor="let branch of filteredBranches"
       class="rounded-lg p-0 border border-border"
@@ -96,26 +122,22 @@
             label="Ver Detalles"
             icon="pi pi-angle-right"
             class="p-button-text"
-          >
-          </p-button>
+          ></p-button>
           <p-button
             (onClick)="editBranch(branch)"
             icon="pi pi-pencil"
             styleClass="p-button-rounded p-button-text"
-          >
-          </p-button>
+          ></p-button>
           <p-button
             (onClick)="deleteBranchById(branch)"
             icon="pi pi-trash"
             styleClass="p-button-rounded p-button-text"
             iconClass="icon-red"
-          >
-          </p-button>
+          ></p-button>
         </div>
       </ng-template>
     </p-card>
   </div>
-  <!-- Ventana modal usando p-dialog -->
   <!-- Ventana modal usando p-dialog -->
   <p-dialog
     [(visible)]="showModal"

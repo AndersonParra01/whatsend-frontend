@@ -18,7 +18,7 @@ import { ToastModule } from 'primeng/toast';
 import { Customer } from '@app/models/customers';
 import { Message } from '@app/models/messages';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
+import { SkeletonModule } from 'primeng/skeleton';
 @Component({
   selector: 'app-branches',
   imports: [
@@ -33,7 +33,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     SelectModule,
     Tag,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    SkeletonModule
   ],
   templateUrl: './branches.component.html',
   styleUrl: './branches.component.css',
@@ -53,6 +54,8 @@ export class BranchesComponent implements OnInit {
   modalMode: 'view' | 'edit' | 'add' = 'view';
   selectedBranch: Branch_Office | null = null;
   loading: boolean = false;
+  skeletonArray: number[] = [];
+
   customerForBranches: Customer[] = [];
   messagesForBranches: Message[] = [];
 
@@ -80,7 +83,7 @@ export class BranchesComponent implements OnInit {
     this.branchService.getAllBranches().subscribe({
       next: (branches) => {
         console.log('branches sin ordenar: ', branches);
-
+        this.skeletonArray = branches.length > 0 ? Array(branches.length).fill(0) : [1];
         // Ordenar primero por `updatedAt` (desc), si existe,
         // y luego por `createdAt` (desc).
         this.branches = branches.sort((a, b) => {
