@@ -1,51 +1,40 @@
-<p-toast />
-<p-confirmdialog />
+<!-- Título de la pantalla -->
+<div class="text-center mb-6">
+  <h2 class="text-2xl font-semibold">Gestión de Clientes</h2>
+</div>
+
+<p-toast></p-toast>
+<p-confirmdialog></p-confirmdialog>
+
+<!-- Modal de creación/edición de cliente -->
 <app-customer-form
   [visible]="openModalCreateAndUpdateCustomer"
   (close)="closeModal($event)"
   [customer]="selectedCustomer"
 ></app-customer-form>
-<!--   [isUpdate]="true" -->
-<p-toolbar styleClass="w-full">
-  <ng-template #start>
-    <app-search (customers)="filterCustomers($event)"></app-search>
-  </ng-template>
 
-  <ng-template #end>
-    <!--     <p-fileUpload
-      mode="basic"
-      accept="image/*"
-      [maxFileSize]="1000000"
-      label="Importar Clientes"
-      chooseLabel="Import"
-      auto
-      customUpload
-      class="mr-2 inline-block"
-      [chooseButtonProps]="{ severity: 'secondary' }"
-    /> -->
+<!-- Barra de herramientas con buscador y botones -->
+<div class="flex flex-col sm:flex-row items-center justify-between mb-4">
+  <div class="w-full sm:w-1/2 mb-2 sm:mb-0">
+    <app-search (customers)="filterCustomers($event)"></app-search>
+  </div>
+  <div class="flex space-x-2">
     <p-button
       label="Nuevo Cliente"
       icon="pi pi-plus"
-      class="mr-2"
       (onClick)="newCustomer()"
-    />
-    <!--  <p-button
-      severity="danger"
-      label="Delete"
-      icon="pi pi-trash"
-      outlined
-      (onClick)="deleteSelectedProducts()"
-      [disabled]="!selectsMessage || !selectsMessage.length"
-    /> -->
+    ></p-button>
     <p-button
       label="Importar Clientes"
       icon="pi pi-upload"
       severity="secondary"
       (onClick)="importListCustomers()"
-    />
-  </ng-template>
-</p-toolbar>
-<p-card>
+    ></p-button>
+  </div>
+</div>
+
+<!-- Tarjeta con la tabla de clientes -->
+<div class="overflow-x-auto">
   <p-table
     [value]="customer"
     responsiveLayout="scroll"
@@ -53,69 +42,85 @@
     scrollHeight="flex"
     [showGridlines]="true"
     [stripedRows]="true"
+    responsiveLayout="stack"
+    [rowHover]="true"
+    [lazy]="true"
   >
-    <ng-template #header>
+    <ng-template pTemplate="caption">
+      <p-progressbar
+        *ngIf="loading"
+        mode="indeterminate"
+        [style]="{ height: '6px' }"
+      />
+    </ng-template>
+    <ng-template pTemplate="header">
       <tr>
-        <th>N°</th>
-        <th>Nombres</th>
-        <th>Telefono</th>
-        <th>Sucursal</th>
-        <th>Estado</th>
-        <th>Fecha Creación</th>
-        <th>Acciones</th>
+        <th class="px-2 py-1">N°</th>
+        <th class="px-2 py-1">Nombres</th>
+        <th class="px-2 py-1">Teléfono</th>
+        <th class="px-2 py-1">Sucursal</th>
+        <th class="px-2 py-1">Estado</th>
+        <th class="px-2 py-1">Fecha Creación</th>
+        <th class="px-2 py-1">Acciones</th>
       </tr>
     </ng-template>
-    <ng-template #body let-customer let-i="rowIndex">
+    <ng-template pTemplate="body" let-customer let-i="rowIndex">
       <tr>
-        <td>{{ i + 1 }}</td>
-        <td>{{ customer.names }}</td>
-        <td>{{ customer.phone }}</td>
-        <td>
+        <td class="px-2 py-1">{{ i + 1 }}</td>
+        <td class="px-2 py-1">{{ customer.names }}</td>
+        <td class="px-2 py-1">{{ customer.phone }}</td>
+        <td class="px-2 py-1">
           <p-tag severity="danger" [value]="customer.branch.name"></p-tag>
         </td>
-        <td>
+        <td class="px-2 py-1">
           <p-tag [value]="customer.status"></p-tag>
         </td>
-
-        <td>
+        <td class="px-2 py-1">
           {{ customer.createdAt | date : "dd/MM/yyyy HH:mm" }}
         </td>
-
-        <td>
-          <p-button
-            icon="pi pi-pencil"
-            class="mr-2"
-            [rounded]="true"
-            [outlined]="true"
-            (click)="editCustomer(customer)"
-          />
-          <p-button
-            icon="pi pi-trash"
-            severity="danger"
-            [rounded]="true"
-            [outlined]="true"
-            (click)="deleteCustomer(customer)"
-          />
+        <td class="px-2 py-1">
+          <div class="flex space-x-2">
+            <p-button
+              icon="pi pi-pencil"
+              [rounded]="true"
+              [outlined]="true"
+              (click)="editCustomer(customer)"
+            ></p-button>
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [rounded]="true"
+              [outlined]="true"
+              (click)="deleteCustomer(customer)"
+            ></p-button>
+          </div>
         </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" class="text-center p-4">
+        <td colspan="7" class="text-center p-4">
           <div class="flex flex-col items-center justify-center">
-            <i
-              class="pi pi-inbox mb-3 justify-center items-center"
-              style="font-size: 2rem"
-            ></i>
+            <i class="pi pi-inbox mb-3" style="font-size: 2rem"></i>
             <span>No se encontraron los contactos</span>
           </div>
         </td>
       </tr>
+      <tr>
+        <td colspan="6" class="text-center">
+          <p-progressbar
+            *ngIf="loading"
+            mode="indeterminate"
+            [style]="{ height: '6px' }"
+          />
+        </td>
+      </tr>
     </ng-template>
   </p-table>
-</p-card>
-<div class="card flex justify-center">
-  <!--   (onPageChange)="onPageChange($event)" -->
+</div>
+
+<!-- Paginador centrado -->
+<div class="flex justify-center">
   <p-paginator
     [first]="first"
     [rows]="rows"

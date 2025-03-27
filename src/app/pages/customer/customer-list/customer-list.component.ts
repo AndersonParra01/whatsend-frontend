@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { SearchComponent } from '../search/search.component';
 import { Tag } from 'primeng/tag';
 import { CardModule } from 'primeng/card';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 
 @Component({
@@ -34,7 +35,8 @@ import { CardModule } from 'primeng/card';
     FormsModule,
     SearchComponent,
     Tag,
-    CardModule
+    CardModule,
+    ProgressBarModule
   ],
   templateUrl: './customer-list.component.html',
   styleUrl: './customer-list.component.css',
@@ -46,6 +48,7 @@ export class CustomerListComponent implements OnInit {
   selectedCustomer: Customer | null = null;
   first: number = 0;
   rows: number = 10;
+  loading: boolean = false;
 
   constructor(
     private router: Router,
@@ -58,10 +61,12 @@ export class CustomerListComponent implements OnInit {
   }
 
   getCustomerAll() {
+    this.loading = true;
     this.customerService.getAllCustomers().subscribe({
       next: (customer) => {
         console.log('All customers', customer);
         this.customer = customer;
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error getting customers', error);
