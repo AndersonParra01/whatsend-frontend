@@ -1,14 +1,16 @@
-<p-toast />
-<div class="">
-  <p-toolbar styleClass="w-full">
-    <ng-template #start>
+<p-toast></p-toast>
+
+<p-toolbar
+  class="w-full flex flex-col sm:flex-row justify-between items-center"
+>
+  <ng-template #start>
+    <div class="flex flex-wrap gap-2">
       <p-button
         label="Nuevo Mensaje"
         icon="pi pi-plus"
-        class="mr-2"
         (onClick)="newMessage()"
         routerLink="new"
-      />
+      ></p-button>
       <div *ngIf="selectedMessages.length > 0">
         <p-button
           severity="danger"
@@ -16,11 +18,13 @@
           icon="pi pi-trash"
           outlined
           (onClick)="deleteSelectedProducts()"
-        />
+        ></p-button>
       </div>
-    </ng-template>
+    </div>
+  </ng-template>
 
-    <ng-template #end>
+  <ng-template #end>
+    <div class="flex flex-wrap gap-2">
       <p-fileUpload
         mode="basic"
         accept="image/*"
@@ -29,37 +33,43 @@
         chooseLabel="Import"
         auto
         customUpload
-        class="mr-2 inline-block"
+        class="inline-block"
         [chooseButtonProps]="{ severity: 'warning' }"
-      />
-      <!-- <p-button
-        label="Export"
-        icon="pi pi-upload"
-        severity="secondary"
-        (onClick)="exportCSV()"
-      /> -->
-    </ng-template>
-  </p-toolbar>
-
-  <div class="card">
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="m-0">Mensajes</h1>
-      <div class="flex gap-2">
-        <div class="relative">
-          <p-inputGroup>
-            <p-inputgroup-addon>
-              <i class="pi pi-search"></i>
-            </p-inputgroup-addon>
-            <input
-              pInputText
-              [(ngModel)]="searchQuery"
-              (keyup.enter)="onSearchChange()"
-              placeholder="Buscar sucursales..."
-            />
-          </p-inputGroup>
-        </div>
-      </div>
+      ></p-fileUpload>
+      <!-- Puedes habilitar el botón de exportar si es necesario -->
+      <!--
+      <p-button
+          label="Export"
+          icon="pi pi-upload"
+          severity="secondary"
+          (onClick)="exportCSV()"
+      ></p-button>
+      -->
     </div>
+  </ng-template>
+</p-toolbar>
+
+<div class="card mt-4">
+  <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
+    <h1 class="text-lg font-bold mb-2 sm:mb-0">Mensajes</h1>
+    <div class="w-full sm:w-auto">
+      <p-inputGroup>
+        <p-inputgroup-addon>
+          <i class="pi pi-search"></i>
+        </p-inputgroup-addon>
+        <input
+          pInputText
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="onSearchChange()"
+          placeholder="Buscar sucursales..."
+          class="w-full"
+        />
+      </p-inputGroup>
+    </div>
+  </div>
+
+  <!-- Contenedor para permitir scroll horizontal en pantallas pequeñas -->
+  <div class="overflow-x-auto">
     <p-table
       [value]="messages"
       [rows]="rows"
@@ -69,23 +79,20 @@
       [rowHover]="true"
       [(selection)]="selectedMessages"
       [rowsPerPageOptions]="[10, 25, 50]"
-      [scrollable]="true"
-      [(selection)]="selectedMessages"
-      [showGridlines]="true"
-      scrollHeight="flex"
+      responsiveLayout="stack"
       [stripedRows]="true"
-      responsiveLayout="scroll"
     >
-      <ng-template #caption>
+      <ng-template pTemplate="caption">
         <p-progressbar
           *ngIf="loading"
           mode="indeterminate"
           [style]="{ height: '6px' }"
         />
       </ng-template>
+
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 3rem">
+          <th class="w-12">
             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
           <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
@@ -98,7 +105,7 @@
           <th pSortableColumn="status">
             Estado <p-sortIcon field="status"></p-sortIcon>
           </th>
-          <th style="width: 8rem">Acciones</th>
+          <th class="w-32 text-center">Acciones</th>
         </tr>
       </ng-template>
 
@@ -112,22 +119,18 @@
             {{ message.message | slice : 0 : 80 }}
             {{ message.message.length > 15 ? "..." : "" }}
           </td>
-
           <td>{{ message.createdAt | date : "dd/MM/yyyy HH:mm" }}</td>
           <td>
             <p-tag
               [severity]="message.status === 'Activo' ? 'success' : 'warn'"
               [value]="message.status"
-            >
-            </p-tag>
+            ></p-tag>
           </td>
           <td>
-            <div class="flex gap-2 justify-content-center">
+            <div class="flex justify-center gap-2">
               <button
                 pButton
                 icon="pi pi-pencil"
-                [rounded]="true"
-                [outlined]="true"
                 class="p-button-rounded p-button-warning p-button-sm"
                 (click)="editMessage(message)"
               ></button>
@@ -135,8 +138,6 @@
                 pButton
                 icon="pi pi-trash"
                 severity="danger"
-                [rounded]="true"
-                [outlined]="true"
                 class="p-button-rounded p-button-danger p-button-sm"
                 (click)="onDelete(message)"
               ></button>
@@ -144,8 +145,7 @@
                 pButton
                 icon="pi pi-send"
                 severity="help"
-                [rounded]="true"
-                [outlined]="true"
+                class="p-button-rounded p-button-help p-button-sm"
                 (click)="messageToSend(message)"
               ></button>
             </div>
@@ -157,16 +157,13 @@
         <tr>
           <td colspan="6" class="text-center p-4">
             <div class="flex flex-col items-center justify-center">
-              <i
-                class="pi pi-inbox mb-3 justify-center items-center"
-                style="font-size: 2rem"
-              ></i>
+              <i class="pi pi-inbox text-2xl mb-3"></i>
               <span>No se encontraron mensajes</span>
             </div>
           </td>
         </tr>
         <tr>
-          <td colspan="6" class="text-center w-full">
+          <td colspan="6" class="text-center">
             <p-progressbar
               *ngIf="loading"
               mode="indeterminate"
@@ -178,4 +175,5 @@
     </p-table>
   </div>
 </div>
-<p-confirmDialog [style]="{ width: '450px' }" />
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
