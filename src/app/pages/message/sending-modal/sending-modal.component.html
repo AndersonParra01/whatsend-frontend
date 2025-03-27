@@ -1,10 +1,9 @@
 <p-dialog
-  [header]="'Te amo mi amor <J3'"
+  header="Te amo mi amor <J3"
   [modal]="true"
   [(visible)]="visible"
-  [style]="{ width: '25rem' }"
   (onHide)="closeModal()"
-  [style]="{ width: '75%', height: '85%' }"
+  [styleClass]="'w-11/12 sm:w-3/4 md:w-1/2 lg:w-1/2 h-auto max-h-[85vh]'"
   [maximizable]="true"
 >
   <div class="bg-card p-4 rounded-lg shadow-sm">
@@ -12,12 +11,11 @@
       <h2 class="text-xl font-bold">Enviando Progreso</h2>
     </div>
     <div class="mb-6">
-      <p-progressbar [value]="value" />
+      <p-progressbar [value]="value"></p-progressbar>
       <div class="flex justify-between mt-2 mb-2">
         <span class="text-sm font-bold"
           >{{ value.toFixed(1) }}% completado</span
         >
-
         <span class="text-sm"
           >{{ sentCount }}/{{ totalMessages }} mensajes</span
         >
@@ -47,21 +45,20 @@
         <h4 class="font-bold">{{ failedCount }}</h4>
       </div>
     </div>
-    <p-card>
+    <div class="overflow-x-auto mt-4">
       <p-table
         [paginator]="true"
         [rows]="5"
         [totalRecords]="totalMessages"
         [lazy]="true"
-        [sortMode]="'single'"
+        sortMode="single"
         [value]="totalContactsSend"
         [tableStyle]="{ 'min-width': '50rem' }"
         [scrollable]="true"
-        [lazy]="true"
-        [showGridlines]="true"
         scrollHeight="flex"
         [stripedRows]="true"
-        responsiveLayout="scroll"
+        responsiveLayout="stack"
+        [rowHover]="true"
       >
         <ng-template #caption>
           <div
@@ -75,7 +72,7 @@
               [rounded]="true"
               [outlined]="true"
               (click)="exporTotPdfContactsSend()"
-            />
+            ></p-button>
             <p-button
               icon="pi pi-file-excel"
               severity="success"
@@ -83,7 +80,7 @@
               [rounded]="true"
               [outlined]="true"
               (click)="exportToCsvContacsSend()"
-            />
+            ></p-button>
           </div>
         </ng-template>
 
@@ -91,7 +88,6 @@
           <tr>
             <th>Nombres</th>
             <th>Telefono</th>
-
             <th>Sucursal</th>
             <th>Estado del Envio</th>
           </tr>
@@ -99,14 +95,12 @@
         <ng-template #body let-contact>
           <tr>
             <td>{{ contact.names }}</td>
-            <td>
-              {{ contact.phone }}
-            </td>
+            <td>{{ contact.phone }}</td>
             <td>{{ contact.branch }}</td>
             <td>
               <p-tag
                 [value]="contact.status"
-                [severity]="getSeverityByStatus(contact.status)!"
+                [severity]="getSeverityByStatus(contact.status)"
               ></p-tag>
             </td>
           </tr>
@@ -115,24 +109,30 @@
           <tr>
             <td colspan="6" class="text-center p-4">
               <div class="flex flex-col items-center justify-center">
-                <i
-                  class="pi pi-inbox mb-3 justify-center items-center"
-                  style="font-size: 2rem"
-                ></i>
+                <i class="pi pi-inbox mb-3" style="font-size: 2rem"></i>
                 <span>No se encontraron contactos enviados</span>
               </div>
             </td>
           </tr>
         </ng-template>
       </p-table>
-    </p-card>
+    </div>
   </div>
   <div class="flex justify-end gap-2 p-4">
-    <p-button label="Iniciar" severity="secondary" (click)="startSending()" />
-    <!--     <p-button label="Pausar" (click)="pauseSending()" />
- -->
-    <!--     <p-button label="Cancelar" (click)="pauseSending()" />
- -->
-    <p-button label="Salir" (click)="exitModalAndClean()" severity="danger" />
+    <p-button
+      label="Iniciar"
+      severity="secondary"
+      (click)="startSending()"
+    ></p-button>
+    <p-button
+      label="Salir"
+      severity="danger"
+      (click)="exitModalAndClean()"
+    ></p-button>
   </div>
 </p-dialog>
+
+<!--     <p-button label="Pausar" (click)="pauseSending()" />
+-->
+<!--     <p-button label="Cancelar" (click)="pauseSending()" />
+-->
