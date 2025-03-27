@@ -37,6 +37,14 @@ export class SocketService {
     });
   }
 
+  onCodeGenerated(): Observable<string> {
+    return new Observable((observer) => {
+      this.socket.on('pairing-code', (data) => {
+        observer.next(data);
+      });
+    });
+  }
+
   onWhatsAppReady(): Observable<void> {
     return new Observable((observer) => {
       this.socket.on('ready', () => observer.next());
@@ -100,9 +108,7 @@ export class SocketService {
    * Cierra la conexión manualmente (opcional)
    */
   disconnect() {
-    if (this.socket) {
-      this.socket.disconnect();
-    }
+    this.socket.disconnect();
   }
 
   /**

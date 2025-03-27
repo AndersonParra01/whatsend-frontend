@@ -1,90 +1,243 @@
-<div class="flex flex-1">
-  <div
-    *ngIf="!whatsappConnected"
-    class="hidden lg:flex w-1/2 bg-[#00BFA5] text-white flex-col justify-center items-center p-20"
-  >
-    <div class="mb-4">
-      <i class="pi pi-whatsapp text-5xl"></i>
+<p-tabs [value]="value">
+  <p-tablist>
+    <div class="flex justify-center items-center w-full">
+      <p-tab [value]="0">
+        <i class="pi pi-phone text-2xl"></i>
+        Teléfono
+      </p-tab>
+      <p-tab [value]="1">
+        <i class="pi pi-qrcode text-2xl"></i>
+        QR
+      </p-tab>
     </div>
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel [value]="0">
+      <div class="p-4 max-w-md mx-auto">
+        <h2 class="text-xl font-bold mb-4">Ingresa tu número de teléfono</h2>
+        <p-select
+          [options]="countries"
+          [(ngModel)]="selectedCountry"
+          optionLabel="name"
+          optionValue="code"
+          placeholder="Selecciona un país"
+          class="w-full mb-3"
+        >
+        </p-select>
 
-    <h2 class="text-2xl font-bold mb-2">WhatsApp Web</h2>
-    <p class="max-w-md text-center leading-relaxed m-4">
-      Para usar WhatsApp en tu computadora, abre WhatsApp en tu teléfono, toca
-      <strong>Menú</strong> o <strong>Configuración</strong> y selecciona
-      <strong>Dispositivos Vinculados</strong>.
-    </p>
-    <p class="mt-4 max-w-md text-center text-sm opacity-80">
-      Mantén tu teléfono conectado a internet para que la sesión no se cierre.
-    </p>
-  </div>
-
-  <div class="flex-1 flex flex-col p-4">
-    <div *ngIf="!whatsappConnected" class="text-center">
-      <h2 class="text-xl font-semibold text-gray-700 mb-4">
-        Escanea el código QR con WhatsApp
-      </h2>
-
-      <div
-        *ngIf="qrCodeUrl; else waitingQR"
-        class="border border-gray-300 p-4 rounded-lg shadow-md inline-block"
-      >
-        <img
-          [src]="qrCodeUrl"
-          alt="QR Code"
-          class="w-full h-full object-contain"
+        <input
+          pInputText
+          [(ngModel)]="phoneNumber"
+          type="text"
+          class="w-full p-2 border rounded mb-3"
+          placeholder="Ingresa tu número de teléfono"
         />
+
+        <button
+          pButton
+          (click)="onLoginWithPhone()"
+          label="Siguiente"
+          class="w-full p-2"
+        ></button>
+
+        <div class="text-center mt-3">
+          <!-- Link para ir al tab de QR, si quieres mostrarlo como link -->
+          <a class="cursor-pointer text-blue-600" (click)="value = 1">
+            Iniciar sesión con código QR
+          </a>
+        </div>
       </div>
 
-      <ng-template #waitingQR>
-        <p class="text-gray-500">Esperando QR...</p>
-        <p class="text-sm text-accent dark:text-dark-accent">
-          El código QR se actualiza en {{ timeLeft }} segundos
+      <div class="max-w-md mx-auto p-4 text-center">
+        <h2 class="text-2xl font-bold mb-2">
+          Ingresa el código en el teléfono
+        </h2>
+        <p class="text-gray-600 mb-4">
+          Vinculando la cuenta de WhatsApp
+          <span class="font-semibold">
+            {{ selectedCountry }} {{ phoneNumber }}
+          </span>
+          <a
+            class="text-blue-600 underline ml-2 cursor-pointer"
+            (click)="onEditPhone()"
+          >
+            (editar)
+          </a>
         </p>
-      </ng-template>
-    </div>
 
-    <div
-      *ngIf="whatsappConnected"
-      class="flex justify-center items-center bg-gray-100 p-24"
-    >
-      <!-- Card contenedor -->
-      <div
-        class="bg-white rounded-lg shadow-md p-6 max-w-md w-full animate-fadeIn"
-      >
-        <!-- Encabezado -->
-        <div class="text-center mb-4">
-          <h2 class="text-xl font-semibold text-gray-700">
-            ¡WhatsApp está conectado! 🎉
-          </h2>
-          <p class="text-gray-500">Información de la cuenta</p>
+        <div class="flex justify-center space-x-2 mb-6">
+          <input
+            type="text"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-xl"
+            maxlength="1"
+            [(ngModel)]="codeDigits[0]"
+            (input)="onInputChange(0, $event)"
+            #digit0
+          />
+          <input
+            type="text"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-xl"
+            maxlength="1"
+            [(ngModel)]="codeDigits[1]"
+            (input)="onInputChange(1, $event)"
+            #digit1
+          />
+          <input
+            type="text"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-xl"
+            maxlength="1"
+            [(ngModel)]="codeDigits[2]"
+            (input)="onInputChange(2, $event)"
+            #digit2
+          />
+          <input
+            type="text"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-xl"
+            maxlength="1"
+            [(ngModel)]="codeDigits[3]"
+            (input)="onInputChange(3, $event)"
+            #digit3
+          />
+          <input
+            type="text"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-xl"
+            maxlength="1"
+            [(ngModel)]="codeDigits[4]"
+            (input)="onInputChange(4, $event)"
+            #digit4
+          />
+          <input
+            type="text"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-xl"
+            maxlength="1"
+            [(ngModel)]="codeDigits[5]"
+            (input)="onInputChange(5, $event)"
+            #digit5
+          />
         </div>
 
-        <!-- Información de usuario -->
-        <div class="space-y-4">
-          <div class="flex items-center space-x-4">
-            <img
-              [src]="userInfo.avatar"
-              alt="Profile Picture"
-              class="w-16 h-16 rounded-full object-cover"
-            />
-            <div>
-              <h2 class="text-lg font-semibold text-gray-800">
-                {{ userConnected?.name }}
-              </h2>
-              <p class="text-sm text-gray-500">
-                {{ userConnected?.id }}
-              </p>
+        <ol
+          class="text-left list-decimal list-inside mb-4 mx-auto max-w-sm text-gray-700"
+        >
+          <li>Abre WhatsApp en tu teléfono.</li>
+          <li>
+            Toca <strong>Menú</strong> en Android o <strong>Ajustes</strong> en
+            iPhone.
+          </li>
+          <li>
+            Toca <strong>Dispositivos vinculados</strong> y luego
+            <strong>Vincular un dispositivo</strong>.
+          </li>
+          <li>
+            Toca <strong>Ingresar un número de teléfono</strong> e introduce el
+            código que ves aquí.
+          </li>
+        </ol>
+
+        <div class="mb-4">
+          <button
+            pButton
+            (click)="onLoginWithPhone()"
+            label="Confirmar código"
+            class="w-full"
+          ></button>
+        </div>
+
+        <a
+          class="text-blue-600 underline cursor-pointer"
+          (click)="onSwitchToQR()"
+        >
+          Iniciar sesión con código QR
+        </a>
+      </div>
+    </p-tabpanel>
+    <p-tabpanel [value]="1">
+      <div class="flex flex-1">
+        <div
+          *ngIf="!whatsappConnected"
+          class="hidden lg:flex w-1/2 bg-[#00BFA5] text-white flex-col justify-center items-center p-20"
+        >
+          <div class="mb-4">
+            <i class="pi pi-whatsapp text-5xl"></i>
+          </div>
+
+          <h2 class="text-2xl font-bold mb-2">WhatsApp Web</h2>
+          <p class="max-w-md text-center leading-relaxed m-4">
+            Para usar WhatsApp en tu computadora, abre WhatsApp en tu teléfono,
+            toca
+            <strong>Menú</strong> o <strong>Configuración</strong> y selecciona
+            <strong>Dispositivos Vinculados</strong>.
+          </p>
+          <p class="mt-4 max-w-md text-center text-sm opacity-80">
+            Mantén tu teléfono conectado a internet para que la sesión no se
+            cierre.
+          </p>
+        </div>
+
+        <div class="flex-1 flex flex-col p-4">
+          <div *ngIf="!whatsappConnected" class="text-center">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">
+              Escanea el código QR con WhatsApp
+            </h2>
+
+            <div
+              *ngIf="qrCodeUrl; else waitingQR"
+              class="border border-gray-300 p-4 rounded-lg shadow-md inline-block"
+            >
+              <img
+                [src]="qrCodeUrl"
+                alt="QR Code"
+                class="w-full h-full object-contain"
+              />
+            </div>
+
+            <ng-template #waitingQR>
+              <p class="text-gray-500">Esperando QR...</p>
+              <p class="text-sm text-accent dark:text-dark-accent"></p>
+            </ng-template>
+          </div>
+
+          <div
+            *ngIf="whatsappConnected"
+            class="flex justify-center items-center bg-gray-100 p-24"
+          >
+            <div
+              class="bg-white rounded-lg shadow-md p-6 max-w-md w-full animate-fadeIn"
+            >
+              <div class="text-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-700">
+                  ¡WhatsApp está conectado! 🎉
+                </h2>
+                <p class="text-gray-500">Información de la cuenta</p>
+              </div>
+
+              <div class="space-y-4">
+                <div class="flex items-center space-x-4">
+                  <img
+                    [src]="userInfo.avatar"
+                    alt="Profile Picture"
+                    class="w-16 h-16 rounded-full object-cover"
+                  />
+                  <div>
+                    <h2 class="text-lg font-semibold text-gray-800">
+                      {{ userConnected?.name }}
+                    </h2>
+                    <p class="text-sm text-gray-500">
+                      {{ userConnected?.id }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="p-4 bg-gray-50 rounded-md">
+                  <p class="text-sm text-gray-600">
+                    {{ userInfo.status }}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-
-          <!-- Estado -->
-          <div class="p-4 bg-gray-50 rounded-md">
-            <p class="text-sm text-gray-600">
-              {{ userInfo.status }}
-            </p>
-          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+    </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>

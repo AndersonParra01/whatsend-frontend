@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { LocalstorageService } from '@app/services/core/localstorage.service';
 import { ThemeService } from '@app/services/core/theme.service';
 import { SocketService } from '@app/services/socket.service';
 import { AvatarModule } from 'primeng/avatar';
@@ -19,7 +20,8 @@ export class TopbarComponent {
 
   constructor(
     private socketService: SocketService,
-    public theme: ThemeService
+    public theme: ThemeService,
+    private storage: LocalstorageService
   ) { }
 
   onToggleSidebar() {
@@ -31,13 +33,16 @@ export class TopbarComponent {
   }
 
   logout() {
+    this.menuOpen = false;
     console.log('logout');
     this.socketService.emit('logout');
 
     this.socketService.listen('loggedOut').subscribe({
       next: (data) => {
         console.log('Logged out', data);
-        this.menuOpen = false;
+        this.storage.clear();
+        location.reload();
+
       },
       error: (error) => {
         console.error('Error logging out', error);
