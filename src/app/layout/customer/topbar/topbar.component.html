@@ -16,23 +16,17 @@
   <div class="flex items-center relative">
     <button
       pButton
-      [icon]="
-        theme.currentTheme === 'dark'
-          ? 'pi pi-sun'
-          : theme.currentTheme === 'light'
-          ? 'pi pi-moon'
-          : 'pi pi-desktop'
-      "
+      [icon]="theme.currentTheme === 'dark' ? 'pi pi-sun' : 'pi pi-moon'"
       (click)="toggleTheme()"
-      class="p-button-rounded p-button-secondary"
+      class="p-button-rounded p-button-secondary text-gray-700 dark:text-gray-200"
     ></button>
 
-    <button class="p-2 mr-4">
+    <button class="p-2 mr-4 text-gray-700 dark:text-gray-200">
       <i class="pi pi-bell text-xl"></i>
     </button>
 
     <div class="relative">
-      <button (click)="toggleMenu()">
+      <button (click)="toggleMenu()" class="text-gray-700 dark:text-gray-200">
         <i class="pi pi-user text-xl"></i>
       </button>
 
