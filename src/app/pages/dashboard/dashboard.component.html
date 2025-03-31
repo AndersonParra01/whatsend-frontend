@@ -58,6 +58,50 @@
   </div>
 </div>
 
+<div
+  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 px-4 sm:px-6 lg:px-8"
+>
+  <!-- Módulo de Clientes -->
+  <div>
+    <a [routerLink]="'/customers/list'" class="block">
+      <p-card class="rounded-lg p-4">
+        <div class="flex items-center">
+          <i class="pi pi-users text-4xl text-blue-500 mr-3"></i>
+          <div>
+            <div class="text-lg font-bold">Módulo de Clientes</div>
+          </div>
+        </div>
+      </p-card>
+    </a>
+  </div>
+  <!-- Módulo de Mensajes -->
+  <div>
+    <a [routerLink]="'/messages'" class="block">
+      <p-card class="rounded-lg p-4">
+        <div class="flex items-center">
+          <i class="pi pi-envelope text-4xl text-green-500 mr-3"></i>
+          <div>
+            <div class="text-lg font-bold">Módulo de Mensajes</div>
+          </div>
+        </div>
+      </p-card>
+    </a>
+  </div>
+  <!-- Módulo de Sucursales -->
+  <div>
+    <a [routerLink]="'/branches'" class="block">
+      <p-card class="rounded-lg p-4">
+        <div class="flex items-center">
+          <i class="pi pi-map-marker text-4xl text-red-500 mr-3"></i>
+          <div>
+            <div class="text-lg font-bold">Módulo de Sucursales</div>
+          </div>
+        </div>
+      </p-card>
+    </a>
+  </div>
+</div>
+
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6 px-4 sm:px-6 lg:px-8">
   <div>
     <p-card header="Mensajes por Día" class="rounded-lg p-4">

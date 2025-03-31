@@ -8,6 +8,7 @@ import { Tag, TagModule } from 'primeng/tag';
 import { MessageService } from '@app/services/message.service';
 import { CustomerService } from '@app/services/customer.service';
 import { BranchService } from '@app/services/branch.service';
+import { RouterModule } from '@angular/router';
 
 interface DashboardStats {
   totalMessages: number;
@@ -31,6 +32,7 @@ interface DashboardStats {
     TableModule,
     TagModule,
     Tag,
+    RouterModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
