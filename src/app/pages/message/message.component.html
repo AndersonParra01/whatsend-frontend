@@ -10,6 +10,7 @@
         icon="pi pi-plus"
         (onClick)="newMessage()"
         routerLink="new"
+        severity="success"
       ></p-button>
       <div *ngIf="selectedMessages.length > 0">
         <p-button
@@ -25,17 +26,17 @@
 
   <ng-template #end>
     <div class="flex flex-wrap gap-2">
-      <p-fileUpload
+      <!-- <p-fileUpload
         mode="basic"
         accept="image/*"
         [maxFileSize]="1000000"
         label="Importar "
-        chooseLabel="Import"
+        chooseLabel="Importar"
         auto
         customUpload
         class="inline-block"
         [chooseButtonProps]="{ severity: 'warning' }"
-      ></p-fileUpload>
+      ></p-fileUpload> -->
       <!-- Puedes habilitar el botón de exportar si es necesario -->
       <!--
       <p-button
