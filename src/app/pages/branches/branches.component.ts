@@ -19,6 +19,7 @@ import { Customer } from '@app/models/customers';
 import { Message } from '@app/models/messages';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SkeletonModule } from 'primeng/skeleton';
+
 @Component({
   selector: 'app-branches',
   imports: [
@@ -68,7 +69,7 @@ export class BranchesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAllBranches();
+    this.loadingAllBranches();
   }
 
   get filteredBranches(): Branch_Office[] {
@@ -79,13 +80,13 @@ export class BranchesComponent implements OnInit {
       ));
   }
 
-  getAllBranches() {
+  loadingAllBranches() {
+    this.loading = true;
     this.branchService.getAllBranches().subscribe({
       next: (branches) => {
         console.log('branches sin ordenar: ', branches);
         this.skeletonArray = branches.length > 0 ? Array(branches.length).fill(0) : [1];
-        // Ordenar primero por `updatedAt` (desc), si existe,
-        // y luego por `createdAt` (desc).
+
         this.branches = branches.sort((a, b) => {
           const updatedA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
           const updatedB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
@@ -108,11 +109,14 @@ export class BranchesComponent implements OnInit {
           const createdB = new Date(b.createdAt).getTime();
           return createdB - createdA;
         });
-
         console.log('branches ordenadas: ', this.branches);
-        branches.forEach((branch) => this.getAllCustomerByBranch(branch.id!));
+        setTimeout(() => {
+          branches.forEach((branch) => this.getAllCustomerByBranch(branch.id!));
+          this.loading = false;
+        }, 1000);
       },
       error: (error) => {
+        this.loading = false;
         console.error('Error getting branches', error);
       },
     });
@@ -142,7 +146,7 @@ export class BranchesComponent implements OnInit {
     });
   }
 
-  counterCustomersByBranch(branchId: number | undefined): number {
+  counterCustomersByBranch(branchId: number | undefined) {
     console.log('BRANCH: ', branchId);
     let count = 0;
     this.customerForBranches.forEach(customer => {
@@ -206,7 +210,7 @@ export class BranchesComponent implements OnInit {
       this.branchService.createBranch(this.selectedBranch).subscribe({
         next: (newBranch) => {
           console.log('Branch created: ', newBranch);
-          this.getAllBranches();
+          this.loadingAllBranches();
           this.messagePrimeNg.add({
             severity: 'success',
             summary: 'Sucursal creada exitosamente',
@@ -225,7 +229,7 @@ export class BranchesComponent implements OnInit {
       this.branchService.updateBranch(this.selectedBranch).subscribe({
         next: (updatedBranch) => {
           console.log('Branch updated: ', updatedBranch);
-          this.getAllBranches();
+          this.loadingAllBranches();
           this.messagePrimeNg.add({
             severity: 'success',
             summary: 'Sucursal actualizada exitosamente',
@@ -252,7 +256,7 @@ export class BranchesComponent implements OnInit {
         this.branchService.deleteBranch(branch.id!).subscribe({
           next: () => {
             console.log('Branch deleted: ', branch.id);
-            this.getAllBranches();
+            this.loadingAllBranches();
             this.messagePrimeNg.add({
               severity: 'success',
               summary: 'Sucursal eliminada exitosamente',

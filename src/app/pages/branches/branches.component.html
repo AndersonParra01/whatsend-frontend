@@ -2,7 +2,6 @@
 <p-confirmdialog />
 
 <div class="container">
-  <!-- Título principal -->
   <div
     class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4"
   >
@@ -39,18 +38,65 @@
   >
     <div
       *ngFor="let item of skeletonArray"
-      class="rounded-lg border border-border p-0"
+      class="rounded-lg border border-border p-6 shadow-sm bg-white"
     >
-      <!-- Skeleton para el header -->
-      <p-skeleton width="100%" height="80px"></p-skeleton>
-      <!-- Skeleton para el contenido -->
-      <div class="p-4">
-        <p-skeleton width="70%" height="20px" class="mb-2"></p-skeleton>
-        <p-skeleton width="90%" height="20px"></p-skeleton>
+      <!-- Header -->
+      <div class="flex justify-between items-start mb-4 p-2">
+        <div>
+          <p-skeleton width="120px" height="20px" class="mb-2"></p-skeleton>
+          <div class="flex items-center gap-2">
+            <i class="pi pi-map-marker text-gray-400"></i>
+            <p-skeleton width="100px" height="16px"></p-skeleton>
+          </div>
+        </div>
+        <p-skeleton
+          width="60px"
+          height="24px"
+          styleClass="rounded-full"
+        ></p-skeleton>
       </div>
-      <!-- Skeleton para los botones o acciones -->
-      <div class="p-4 border-t border-border">
-        <p-skeleton width="40%" height="25px"></p-skeleton>
+
+      <hr class="my-3" />
+
+      <!-- Métricas -->
+      <div class="grid grid-cols-2 gap-4 text-sm mb-4 p-2">
+        <div>
+          <p-skeleton width="80px" height="14px" class="mb-1"></p-skeleton>
+          <p-skeleton width="30px" height="16px"></p-skeleton>
+        </div>
+        <div>
+          <p-skeleton width="100px" height="14px" class="mb-1"></p-skeleton>
+          <p-skeleton width="30px" height="16px"></p-skeleton>
+        </div>
+      </div>
+
+      <!-- Contacto -->
+      <div class="mb-4">
+        <p-skeleton width="70px" height="14px" class="mb-1"></p-skeleton>
+        <p-skeleton width="110px" height="18px"></p-skeleton>
+      </div>
+
+      <hr class="my-3" />
+
+      <!-- Botones -->
+      <div class="flex justify-between items-center">
+        <p-skeleton
+          width="100px"
+          height="36px"
+          styleClass="rounded-md"
+        ></p-skeleton>
+        <div class="flex gap-3">
+          <p-skeleton
+            width="28px"
+            height="28px"
+            styleClass="rounded-full"
+          ></p-skeleton>
+          <p-skeleton
+            width="28px"
+            height="28px"
+            styleClass="rounded-full"
+          ></p-skeleton>
+        </div>
       </div>
     </div>
   </div>
@@ -122,17 +168,19 @@
             label="Ver Detalles"
             icon="pi pi-angle-right"
             class="p-button-text"
+            severity="info"
           ></p-button>
           <p-button
             (onClick)="editBranch(branch)"
             icon="pi pi-pencil"
             styleClass="p-button-rounded p-button-text"
+            severity="warn"
           ></p-button>
           <p-button
             (onClick)="deleteBranchById(branch)"
             icon="pi pi-trash"
             styleClass="p-button-rounded p-button-text"
-            iconClass="icon-red"
+            severity="danger"
           ></p-button>
         </div>
       </ng-template>
@@ -153,70 +201,101 @@
   >
     <!-- Se muestra el contenido solo si existe selectedBranch -->
     <div *ngIf="selectedBranch">
-      <!-- Formulario con inputs -->
-      <div class="mt-2 space-y-4">
+      <!-- Formulario -->
+      <div class="mt-2 space-y-2">
+        <!-- Nombre -->
         <div>
           <label class="font-semibold block mb-1">Nombre:</label>
-          <input
-            pInputText
-            [(ngModel)]="selectedBranch.name"
-            name="branchName"
-            class="w-full"
-            [disabled]="modalMode === 'view'"
-          />
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-building"></i>
+            </p-inputgroup-addon>
+            <input
+              pInputText
+              [(ngModel)]="selectedBranch.name"
+              name="branchName"
+              class="w-full"
+              placeholder="Ingrese el nombre de la sucursal"
+              [disabled]="modalMode === 'view'"
+            />
+          </p-inputgroup>
         </div>
 
+        <!-- Dirección -->
         <div>
           <label class="font-semibold block mb-1">Ubicación:</label>
-          <input
-            pInputText
-            [(ngModel)]="selectedBranch.address"
-            name="branchAddress"
-            class="w-full"
-            [disabled]="modalMode === 'view'"
-          />
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-map-marker"></i>
+            </p-inputgroup-addon>
+            <input
+              pInputText
+              [(ngModel)]="selectedBranch.address"
+              name="branchAddress"
+              class="w-full"
+              placeholder="Ingrese la dirección"
+              [disabled]="modalMode === 'view'"
+            />
+          </p-inputgroup>
         </div>
 
+        <!-- Contacto -->
         <div>
           <label class="font-semibold block mb-1">Contacto:</label>
-          <input
-            pInputText
-            [(ngModel)]="selectedBranch.contact"
-            name="branchContact"
-            class="w-full"
-            [disabled]="modalMode === 'view'"
-          />
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-phone"></i>
+            </p-inputgroup-addon>
+            <input
+              pInputText
+              [(ngModel)]="selectedBranch.contact"
+              name="branchContact"
+              class="w-full"
+              placeholder="Ingrese el número de contacto"
+              [disabled]="modalMode === 'view'"
+            />
+          </p-inputgroup>
         </div>
 
+        <!-- Estado -->
         <div>
           <label class="font-semibold block mb-1">Estado:</label>
-          <p-select
-            [options]="statusOptions"
-            [(ngModel)]="selectedBranch.status"
-            name="branchStatus"
-            optionLabel="label"
-            optionValue="value"
-            class="w-full"
-            [disabled]="modalMode === 'view'"
-          ></p-select>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-info-circle"></i>
+            </p-inputgroup-addon>
+            <p-select
+              [options]="statusOptions"
+              [(ngModel)]="selectedBranch.status"
+              name="branchStatus"
+              optionLabel="label"
+              optionValue="value"
+              class="w-full"
+              placeholder="Seleccione un estado"
+              [disabled]="modalMode === 'view'"
+            ></p-select>
+          </p-inputgroup>
         </div>
       </div>
 
-      <!-- Botones del modal -->
+      <!-- Botones -->
       <div class="mt-6 flex justify-end gap-4">
         <p-button
           (onClick)="closeModal()"
           label="Cerrar"
+          icon="pi pi-times"
           class="p-button-text"
+          [severity]="'danger'"
         ></p-button>
 
-        <!-- El botón de guardar solo aparece en modo 'edit' o 'add' -->
         <p-button
           *ngIf="modalMode === 'edit' || modalMode === 'add'"
           label="Guardar Cambios"
+          icon="pi pi-save"
           (onClick)="saveBranch()"
           class="p-button-primary"
           [loading]="loading"
+          severity="success"
         ></p-button>
       </div>
     </div>
