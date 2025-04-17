@@ -75,12 +75,13 @@
       [rows]="rows"
       [totalRecords]="totalRecords"
       [paginator]="true"
-      [lazy]="true"
-      [rowHover]="true"
       [(selection)]="selectedMessages"
       [rowsPerPageOptions]="[10, 25, 50]"
-      responsiveLayout="stack"
+      [showGridlines]="true"
       [stripedRows]="true"
+      responsiveLayout="stack"
+      [rowHover]="true"
+      [lazy]="true"
     >
       <ng-template pTemplate="caption">
         <p-progressbar
