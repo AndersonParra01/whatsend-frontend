@@ -33,6 +33,7 @@ export class FileUploadComponent {
 
 
   onFileSelected(event: any): void {
+    console.log('SUBIENDO: ', event);
     const file = event.target.files[0];
     this.handleFile(file);
   }

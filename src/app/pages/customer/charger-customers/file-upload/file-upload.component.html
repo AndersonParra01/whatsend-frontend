@@ -9,7 +9,7 @@
     #fileInput
     class="hidden"
     (change)="onFileSelected($event)"
-    accept=".xlsx,.xls,.csv"
+    accept=".xlsx,.xls,.csv,image/*"
     multiple="false"
   />
   <img
@@ -17,7 +17,9 @@
     alt="upload icon"
     class="w-16 h-16 mx-auto mb-4"
   />
-  <p class="text-gray-600 mb-2">Arrastre y suelte su archivo de Excel aquí</p>
+  <p class="text-gray-600 mb-2">
+    Arrastre y suelte su archivo de Imagen o Excel aquí
+  </p>
   <button
     (click)="fileInput.click()"
     class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"

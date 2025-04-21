@@ -193,9 +193,9 @@
     [closable]="true"
     [style]="{
       width: '100%',
-      height: '100%',
+      height: 'auto',
       'max-width': '500px',
-      'max-height': '570px'
+      'max-height': '90vh'
     }"
     [header]="modalTitle"
   >
@@ -279,7 +279,7 @@
       </div>
 
       <!-- Botones -->
-      <div class="mt-6 flex justify-end gap-4">
+      <div class="flex justify-end gap-2 px-3 pb-3">
         <p-button
           (onClick)="closeModal()"
           label="Cerrar"
@@ -293,9 +293,7 @@
           label="Guardar Cambios"
           icon="pi pi-save"
           (onClick)="saveBranch()"
-          class="p-button-primary"
           [loading]="loading"
-          severity="success"
         ></p-button>
       </div>
     </div>
